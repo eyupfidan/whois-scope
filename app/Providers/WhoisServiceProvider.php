@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Domain\Whois\Repositories\WhoisRepositoryInterface;
+use App\Domain\Whois\Services\RegistrationStatusDetector;
 use App\Infrastructure\Whois\CachedWhoisRepository;
 use App\Infrastructure\Whois\PhpWhoisRepository;
 use Illuminate\Cache\RateLimiting\Limit;
@@ -19,6 +20,7 @@ class WhoisServiceProvider extends ServiceProvider
         $this->app->singleton(WhoisRepositoryInterface::class, function ($app) {
             return new CachedWhoisRepository(
                 $app->make(PhpWhoisRepository::class),
+                $app->make(RegistrationStatusDetector::class),
             );
         });
     }

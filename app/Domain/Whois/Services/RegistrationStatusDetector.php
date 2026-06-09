@@ -18,16 +18,16 @@ class RegistrationStatusDetector
         array $nameServers,
         array $states,
     ): DomainRegistrationStatus {
+        if ($registrar || $createdAt || $expiresAt || $nameServers !== [] || $states !== []) {
+            return DomainRegistrationStatus::Registered;
+        }
+
         $rawLower = strtolower($raw);
 
         foreach ($this->availablePatterns() as $pattern) {
             if (str_contains($rawLower, $pattern)) {
                 return DomainRegistrationStatus::Available;
             }
-        }
-
-        if ($registrar || $createdAt || $expiresAt || $nameServers !== [] || $states !== []) {
-            return DomainRegistrationStatus::Registered;
         }
 
         if (trim($raw) === '') {

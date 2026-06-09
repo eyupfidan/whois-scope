@@ -33,7 +33,7 @@ class RegistrationStatusDetectorTest extends TestCase
     public function test_detects_registered_domain_with_registrar(): void
     {
         $status = $this->detector->detect(
-            raw: 'Domain Name: EXAMPLE.COM',
+            raw: 'No match for "OTHER.COM".',
             registrar: 'Example Registrar',
             createdAt: '2020-01-01T00:00:00+00:00',
             expiresAt: null,

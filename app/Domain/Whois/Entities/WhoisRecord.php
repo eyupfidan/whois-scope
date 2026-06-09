@@ -36,6 +36,24 @@ final readonly class WhoisRecord
         return $this->registrationStatus === DomainRegistrationStatus::Available;
     }
 
+    public function withRegistrationStatus(DomainRegistrationStatus $registrationStatus): self
+    {
+        return new self(
+            domain: $this->domain,
+            registrationStatus: $registrationStatus,
+            whoisServer: $this->whoisServer,
+            registrar: $this->registrar,
+            owner: $this->owner,
+            createdAt: $this->createdAt,
+            updatedAt: $this->updatedAt,
+            expiresAt: $this->expiresAt,
+            nameServers: $this->nameServers,
+            states: $this->states,
+            dnssec: $this->dnssec,
+            raw: $this->raw,
+        );
+    }
+
     /**
      * @return array<string, mixed>
      */
