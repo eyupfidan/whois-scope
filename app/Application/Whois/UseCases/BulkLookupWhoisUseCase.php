@@ -3,20 +3,19 @@
 namespace App\Application\Whois\UseCases;
 
 use App\Application\Whois\DTOs\BulkWhoisItemResult;
+use App\Application\Whois\Services\DomainWhoisLookupService;
+use App\Application\Whois\Tasks\LookupWhoisDomainTask;
 use App\Domain\Whois\Exceptions\InvalidDomainException;
-use App\Domain\Whois\Exceptions\UserFacingException;
-use App\Domain\Whois\Exceptions\WhoisLookupException;
-use App\Domain\Whois\Exceptions\WhoisParseException;
-use App\Domain\Whois\Repositories\WhoisRepositoryInterface;
 use App\Domain\Whois\Services\DomainNameParser;
-use Illuminate\Support\Facades\Log;
-use Throwable;
+use App\Infrastructure\Whois\CachedWhoisRepository;
+use Illuminate\Support\Facades\Concurrency;
 
 class BulkLookupWhoisUseCase
 {
     public function __construct(
-        private readonly WhoisRepositoryInterface $repository,
+        private readonly DomainWhoisLookupService $lookupService,
         private readonly DomainNameParser $domainNameParser,
+        private readonly CachedWhoisRepository $cachedRepository,
     ) {}
 
     /**
@@ -27,10 +26,85 @@ class BulkLookupWhoisUseCase
     {
         $this->ensureExecutionBudget(count($domainInputs));
 
+        $results = array_fill(0, count($domainInputs), null);
+        $pending = [];
+
+        foreach ($domainInputs as $index => $domainInput) {
+            try {
+                $domain = $this->domainNameParser->parse($domainInput);
+                $cached = $this->cachedRepository->findCached($domain);
+
+                if ($cached !== null) {
+                    $results[$index] = new BulkWhoisItemResult(
+                        domain: $domain->toString(),
+                        success: true,
+                        record: $cached,
+                    );
+
+                    continue;
+                }
+
+                $pending[$index] = $domainInput;
+            } catch (InvalidDomainException $exception) {
+                $results[$index] = new BulkWhoisItemResult(
+                    domain: $domainInput,
+                    success: false,
+                    record: null,
+                    errorCode: $exception->errorCode(),
+                    message: $exception->userMessage(),
+                );
+            }
+        }
+
+        if ($pending === []) {
+            return array_values($results);
+        }
+
+        $lookups = $this->lookupPendingDomains($pending);
+
+        foreach ($lookups as $index => $result) {
+            $results[$index] = $result;
+        }
+
+        return array_values($results);
+    }
+
+    /**
+     * @param  array<int, string>  $pending
+     * @return array<int, BulkWhoisItemResult>
+     */
+    private function lookupPendingDomains(array $pending): array
+    {
+        $concurrency = max(1, (int) config('whois.bulk_concurrency', 5));
+
+        if (count($pending) === 1 || $concurrency === 1) {
+            $results = [];
+
+            foreach ($pending as $index => $domainInput) {
+                $results[$index] = $this->lookupService->lookup($domainInput);
+            }
+
+            return $results;
+        }
+
         $results = [];
 
-        foreach ($domainInputs as $domainInput) {
-            $results[] = $this->lookupSingle($domainInput);
+        foreach (array_chunk($pending, $concurrency, true) as $chunk) {
+            $tasks = [];
+
+            foreach ($chunk as $index => $domainInput) {
+                $tasks[$index] = static fn (): array => LookupWhoisDomainTask::handle($domainInput);
+            }
+
+            try {
+                foreach (Concurrency::run($tasks) as $index => $payload) {
+                    $results[$index] = BulkWhoisItemResult::fromPayload($payload);
+                }
+            } catch (\Throwable) {
+                foreach ($chunk as $index => $domainInput) {
+                    $results[$index] = $this->lookupService->lookup($domainInput);
+                }
+            }
         }
 
         return $results;
@@ -42,50 +116,12 @@ class BulkLookupWhoisUseCase
             return;
         }
 
-        $timeout = max(1, (int) config('whois.timeout', 10));
+        $timeout = max(1, (int) config('whois.timeout', 8));
+        $concurrency = max(1, (int) config('whois.bulk_concurrency', 5));
         $maxExecution = max(30, (int) config('whois.bulk_max_execution', 300));
-        $budget = min($maxExecution, max(30, ($domainCount * $timeout * 3) + 15));
+        $batches = (int) ceil($domainCount / $concurrency);
+        $budget = min($maxExecution, max(30, ($batches * $timeout * 3) + 15));
 
         set_time_limit($budget);
-    }
-
-    private function lookupSingle(string $domainInput): BulkWhoisItemResult
-    {
-        try {
-            $domain = $this->domainNameParser->parse($domainInput);
-            $record = $this->repository->lookup($domain);
-
-            return new BulkWhoisItemResult(
-                domain: $domain->toString(),
-                success: true,
-                record: $record,
-            );
-        } catch (InvalidDomainException|WhoisLookupException|WhoisParseException $exception) {
-            return $this->failureResult($domainInput, $exception);
-        } catch (Throwable $exception) {
-            Log::error($exception->getMessage(), [
-                'domain' => $domainInput,
-                'exception' => $exception,
-            ]);
-
-            return new BulkWhoisItemResult(
-                domain: $domainInput,
-                success: false,
-                record: null,
-                errorCode: 'server_error',
-                message: 'Something went wrong on our end. Please try again in a moment.',
-            );
-        }
-    }
-
-    private function failureResult(string $domainInput, UserFacingException $exception): BulkWhoisItemResult
-    {
-        return new BulkWhoisItemResult(
-            domain: $domainInput,
-            success: false,
-            record: null,
-            errorCode: $exception->errorCode(),
-            message: $exception->userMessage(),
-        );
     }
 }

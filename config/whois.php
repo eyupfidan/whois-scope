@@ -11,7 +11,29 @@ return [
     |
     */
 
-    'timeout' => (int) env('WHOIS_TIMEOUT', 10),
+    'timeout' => (int) env('WHOIS_TIMEOUT', 8),
+
+    /*
+    |--------------------------------------------------------------------------
+    | WHOIS Connect Timeout
+    |--------------------------------------------------------------------------
+    |
+    | Maximum time in seconds to wait while opening a WHOIS socket connection.
+    |
+    */
+
+    'connect_timeout' => (int) env('WHOIS_CONNECT_TIMEOUT', 3),
+
+    /*
+    |--------------------------------------------------------------------------
+    | Bulk Concurrency
+    |--------------------------------------------------------------------------
+    |
+    | Number of domains to look up in parallel during bulk requests.
+    |
+    */
+
+    'bulk_concurrency' => (int) env('WHOIS_BULK_CONCURRENCY', 5),
 
     /*
     |--------------------------------------------------------------------------

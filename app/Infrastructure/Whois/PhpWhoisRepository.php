@@ -13,7 +13,6 @@ use Iodev\Whois\Exceptions\ConnectionException;
 use Iodev\Whois\Exceptions\ServerMismatchException;
 use Iodev\Whois\Exceptions\WhoisException;
 use Iodev\Whois\Factory;
-use Iodev\Whois\Loaders\SocketLoader;
 use Iodev\Whois\Modules\Tld\TldInfo;
 use Iodev\Whois\Modules\Tld\TldServer;
 use Iodev\Whois\Whois;
@@ -26,7 +25,10 @@ class PhpWhoisRepository implements WhoisRepositoryInterface
         private readonly RegistrationStatusDetector $registrationStatusDetector,
     ) {
         $this->whois = self::withoutDeprecations(function (): Whois {
-            $loader = new SocketLoader((int) config('whois.timeout', 10));
+            $loader = new FastSocketLoader(
+                connectTimeout: (int) config('whois.connect_timeout', 3),
+                readTimeout: (int) config('whois.timeout', 8),
+            );
             $whois = Factory::get()->createWhois($loader);
             $this->registerCustomServersOn($whois);
 

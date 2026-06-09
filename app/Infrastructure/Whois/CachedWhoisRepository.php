@@ -24,25 +24,40 @@ class CachedWhoisRepository implements WhoisRepositoryInterface
             return $this->repository->lookup($domain);
         }
 
+        $cached = $this->findCached($domain);
+
+        if ($cached !== null) {
+            return $cached;
+        }
+
+        $record = $this->repository->lookup($domain);
+
+        Cache::put($this->cacheKey($domain), $record->toCacheArray(), config('whois.cache_ttl'));
+
+        return $record;
+    }
+
+    public function findCached(DomainName $domain): ?WhoisRecord
+    {
+        if (! config('whois.cache_enabled', true)) {
+            return null;
+        }
+
         $key = $this->cacheKey($domain);
 
         /** @var array<string, mixed>|null $cached */
         $cached = Cache::get($key);
 
-        if (is_array($cached)) {
-            $record = WhoisRecord::fromCacheArray($cached);
-            $record = $this->reconcileRegistrationStatus($record);
-
-            if (($cached['registration_status'] ?? null) !== $record->registrationStatus->value) {
-                Cache::put($key, $record->toCacheArray(), config('whois.cache_ttl'));
-            }
-
-            return $record;
+        if (! is_array($cached)) {
+            return null;
         }
 
-        $record = $this->repository->lookup($domain);
+        $record = WhoisRecord::fromCacheArray($cached);
+        $record = $this->reconcileRegistrationStatus($record);
 
-        Cache::put($key, $record->toCacheArray(), config('whois.cache_ttl'));
+        if (($cached['registration_status'] ?? null) !== $record->registrationStatus->value) {
+            Cache::put($key, $record->toCacheArray(), config('whois.cache_ttl'));
+        }
 
         return $record;
     }
