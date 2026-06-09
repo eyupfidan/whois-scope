@@ -1,5 +1,6 @@
 <?php
 
+use App\Domain\Whois\Exceptions\UserFacingException;
 use App\Http\Support\ApiErrorResponder;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
@@ -31,5 +32,11 @@ return Application::configure(basePath: dirname(__DIR__))
             }
         });
 
-        $exceptions->render(fn ($exception, Request $request) => ApiErrorResponder::fromException($exception, $request));
+        $exceptions->render(function (UserFacingException $exception, Request $request) {
+            return ApiErrorResponder::fromException($exception, $request);
+        });
+
+        $exceptions->render(function (\Throwable $exception, Request $request) {
+            return ApiErrorResponder::fromException($exception, $request);
+        });
     })->create();

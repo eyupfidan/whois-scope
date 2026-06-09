@@ -81,7 +81,7 @@ class WhoisApiTest extends TestCase
             ->assertJsonPath('results.0.status', 'success')
             ->assertJsonPath('results.0.data.domain', 'example.com')
             ->assertJsonPath('results.1.status', 'error')
-            ->assertJsonPath('results.1.message', 'Invalid domain: not-a-valid-domain');
+            ->assertJsonPath('results.1.code', 'invalid_domain');
     }
 
     public function test_bulk_full_format_includes_raw_text(): void
@@ -109,7 +109,8 @@ class WhoisApiTest extends TestCase
 
         $response
             ->assertUnprocessable()
-            ->assertJsonPath('message', 'Invalid domain: not-a-valid-domain');
+            ->assertJsonPath('code', 'invalid_domain')
+            ->assertJsonPath('message', 'The domain name you entered is not valid. Please check the format and try again.');
     }
 
     private function sampleRecord(string $domain = 'example.com'): WhoisRecord

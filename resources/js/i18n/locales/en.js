@@ -33,10 +33,19 @@ export default {
         error: 'Error',
         expandAll: 'Expand all',
         collapseAll: 'Collapse all',
+        allFailed: 'None of the domains could be looked up.',
+        partialFailed: ':count domain(s) could not be looked up.',
     },
     errors: {
         rateLimit: 'Too many requests. Please wait a moment.',
-        generic: 'Something went wrong.',
+        generic: 'Something went wrong. Please try again.',
+        codes: {
+            invalid_domain: 'The domain name is not valid. Please check the format and try again.',
+            lookup_failed: 'Could not retrieve whois information. The server may be unavailable — try again later.',
+            parse_failed: 'Whois data could not be processed for this domain.',
+            server_error: 'Something went wrong on our end. Please try again in a moment.',
+            rate_limited: 'Too many requests. Please wait a moment.',
+        },
     },
     features: {
         fast: {

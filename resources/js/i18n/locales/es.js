@@ -15,10 +15,19 @@ export default {
         count: ':count dominio(s)', submit: 'Consulta Masiva', loading: 'Consultando…',
         successCount: ':success / :total exitosos', success: 'Éxito', error: 'Error',
         expandAll: 'Expandir todo', collapseAll: 'Contraer todo',
+        allFailed: 'No se pudo consultar ningún dominio.',
+        partialFailed: ':count dominio(s) no se pudieron consultar.',
     },
     errors: {
         rateLimit: 'Demasiadas solicitudes. Espere un momento.',
-        generic: 'Algo salió mal.',
+        generic: 'Algo salió mal. Inténtelo de nuevo.',
+        codes: {
+            invalid_domain: 'El nombre de dominio no es válido. Compruebe el formato e inténtelo de nuevo.',
+            lookup_failed: 'No se pudo obtener la información whois. El servidor puede no estar disponible.',
+            parse_failed: 'No se pudieron procesar los datos whois de este dominio.',
+            server_error: 'Algo salió mal. Inténtelo de nuevo en un momento.',
+            rate_limited: 'Demasiadas solicitudes. Espere un momento.',
+        },
     },
     features: {
         fast: { title: 'Consulta Rápida', text: 'Respuestas en caché instantáneas para consultas repetidas.' },

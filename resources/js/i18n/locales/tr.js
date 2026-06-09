@@ -15,10 +15,19 @@ export default {
         count: ':count domain', submit: 'Toplu Sorgula', loading: 'Sorgulanıyor…',
         successCount: ':success / :total başarılı', success: 'Başarılı', error: 'Hata',
         expandAll: 'Tümünü aç', collapseAll: 'Tümünü kapat',
+        allFailed: 'Hiçbir domain sorgulanamadı.',
+        partialFailed: ':count domain sorgulanamadı.',
     },
     errors: {
         rateLimit: 'Çok fazla istek gönderdiniz. Lütfen biraz bekleyin.',
-        generic: 'Bir hata oluştu.',
+        generic: 'Bir hata oluştu. Lütfen tekrar deneyin.',
+        codes: {
+            invalid_domain: 'Geçersiz domain adı. Lütfen formatı kontrol edip tekrar deneyin.',
+            lookup_failed: 'Whois bilgisi alınamadı. Sunucu erişilemiyor olabilir — daha sonra tekrar deneyin.',
+            parse_failed: 'Bu domain için whois verisi işlenemedi.',
+            server_error: 'Bir sorun oluştu. Lütfen kısa süre sonra tekrar deneyin.',
+            rate_limited: 'Çok fazla istek gönderdiniz. Lütfen biraz bekleyin.',
+        },
     },
     features: {
         fast: { title: 'Hızlı Sorgulama', text: 'Önbellek desteği ile tekrarlayan sorgularda anında yanıt alın.' },

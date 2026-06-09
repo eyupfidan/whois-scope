@@ -15,10 +15,19 @@ export default {
         count: ':count نطاق', submit: 'بحث جماعي', loading: 'جاري البحث…',
         successCount: ':success / :total ناجح', success: 'نجاح', error: 'خطأ',
         expandAll: 'توسيع الكل', collapseAll: 'طي الكل',
+        allFailed: 'تعذر البحث عن أي نطاق.',
+        partialFailed: 'تعذر البحث عن :count نطاق.',
     },
     errors: {
         rateLimit: 'طلبات كثيرة. يرجى الانتظار.',
-        generic: 'حدث خطأ.',
+        generic: 'حدث خطأ. يرجى المحاولة مرة أخرى.',
+        codes: {
+            invalid_domain: 'اسم النطاق غير صالح. يرجى التحقق من الصيغة والمحاولة مرة أخرى.',
+            lookup_failed: 'تعذر الحصول على معلومات whois. قد يكون الخادم غير متاح.',
+            parse_failed: 'تعذر معالجة بيانات whois لهذا النطاق.',
+            server_error: 'حدث خطأ. يرجى المحاولة مرة أخرى بعد قليل.',
+            rate_limited: 'طلبات كثيرة. يرجى الانتظار.',
+        },
     },
     features: {
         fast: { title: 'بحث سريع', text: 'استجابات مخزنة فورية للاستعلامات المتكررة.' },

@@ -15,10 +15,19 @@ export default {
         count: ':count domaine(s)', submit: 'Recherche en Masse', loading: 'Recherche…',
         successCount: ':success / :total réussis', success: 'Succès', error: 'Erreur',
         expandAll: 'Tout développer', collapseAll: 'Tout réduire',
+        allFailed: 'Aucun domaine n\'a pu être consulté.',
+        partialFailed: ':count domaine(s) n\'ont pas pu être consultés.',
     },
     errors: {
         rateLimit: 'Trop de requêtes. Veuillez patienter.',
-        generic: 'Une erreur est survenue.',
+        generic: 'Une erreur est survenue. Veuillez réessayer.',
+        codes: {
+            invalid_domain: 'Le nom de domaine n\'est pas valide. Vérifiez le format et réessayez.',
+            lookup_failed: 'Impossible d\'obtenir les informations whois. Le serveur est peut-être indisponible.',
+            parse_failed: 'Les données whois de ce domaine n\'ont pas pu être traitées.',
+            server_error: 'Une erreur est survenue. Veuillez réessayer dans un instant.',
+            rate_limited: 'Trop de requêtes. Veuillez patienter.',
+        },
     },
     features: {
         fast: { title: 'Recherche Rapide', text: 'Réponses en cache instantanées pour les requêtes répétées.' },

@@ -3,32 +3,32 @@ import { ref } from 'vue';
 import { lookupDomain } from '../api/whois';
 import WhoisResultCard from './WhoisResultCard.vue';
 import { useI18n } from '../i18n';
+import { useToast } from '../composables/useToast';
+import { useApiError } from '../composables/useApiError';
 
 const { t } = useI18n();
+const toast = useToast();
+const { resolve } = useApiError();
 
 const domain = ref('');
 const format = ref('summary');
 const loading = ref(false);
-const error = ref(null);
 const result = ref(null);
 
 async function submit() {
     const value = domain.value.trim();
-    if (!value) {
+    if (! value) {
         return;
     }
 
     loading.value = true;
-    error.value = null;
     result.value = null;
 
     try {
         const response = await lookupDomain(value, format.value);
         result.value = response.data;
     } catch (err) {
-        error.value = err.status === 429
-            ? t('errors.rateLimit')
-            : (err.message ?? t('errors.generic'));
+        toast.error(resolve(err));
     } finally {
         loading.value = false;
     }
@@ -73,10 +73,6 @@ async function submit() {
                 </label>
             </div>
         </form>
-
-        <div v-if="error" class="rounded-lg bg-red-50 border border-red-200 px-4 py-3 text-red-700 text-sm">
-            {{ error }}
-        </div>
 
         <WhoisResultCard v-if="result" :data="result" :format="format" />
     </div>

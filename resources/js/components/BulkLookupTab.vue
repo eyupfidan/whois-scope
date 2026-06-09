@@ -3,13 +3,16 @@ import { ref, computed, watch } from 'vue';
 import { bulkLookup } from '../api/whois';
 import WhoisResultCard from './WhoisResultCard.vue';
 import { useI18n } from '../i18n';
+import { useToast } from '../composables/useToast';
+import { useApiError } from '../composables/useApiError';
 
 const { t } = useI18n();
+const toast = useToast();
+const { resolve, resolveCode } = useApiError();
 
 const input = ref('');
 const format = ref('summary');
 const loading = ref(false);
-const error = ref(null);
 const response = ref(null);
 const expanded = ref(new Set());
 
@@ -59,12 +62,16 @@ function collapseAll() {
 
 function previewText(item) {
     if (item.status === 'error') {
-        return item.message;
+        return itemMessage(item);
     }
 
     const parts = [item.data?.registrar, item.data?.expires_at].filter(Boolean);
 
     return parts.join(' · ') || '—';
+}
+
+function itemMessage(item) {
+    return resolveCode(item.code);
 }
 
 watch(response, (value) => {
@@ -84,16 +91,21 @@ async function submit() {
     }
 
     loading.value = true;
-    error.value = null;
     response.value = null;
     expanded.value = new Set();
 
     try {
         response.value = await bulkLookup(domains, format.value);
+
+        const failed = response.value.results.filter((r) => r.status === 'error').length;
+
+        if (failed === response.value.results.length) {
+            toast.error(t('bulk.allFailed'));
+        } else if (failed > 0) {
+            toast.error(t('bulk.partialFailed', { count: failed }));
+        }
     } catch (err) {
-        error.value = err.status === 429
-            ? t('errors.rateLimit')
-            : (err.message ?? t('errors.generic'));
+        toast.error(resolve(err));
     } finally {
         loading.value = false;
     }
@@ -144,10 +156,6 @@ async function submit() {
                 </button>
             </div>
         </form>
-
-        <div v-if="error" class="rounded-lg bg-red-50 border border-red-200 px-4 py-3 text-red-700 text-sm">
-            {{ error }}
-        </div>
 
         <div v-if="response" class="space-y-3">
             <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
@@ -221,7 +229,7 @@ async function submit() {
                         class="border-t border-slate-100 px-4 pb-4 pt-3"
                     >
                         <p v-if="item.status === 'error'" class="text-sm text-red-700">
-                            {{ item.message }}
+                            {{ itemMessage(item) }}
                         </p>
                         <WhoisResultCard
                             v-else

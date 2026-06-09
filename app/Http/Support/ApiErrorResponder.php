@@ -6,6 +6,8 @@ use App\Domain\Whois\Exceptions\UserFacingException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Validation\ValidationException;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 use Throwable;
 
 class ApiErrorResponder
@@ -21,6 +23,14 @@ class ApiErrorResponder
                 'message' => $exception->userMessage(),
                 'code' => $exception->errorCode(),
             ], self::statusCode($exception));
+        }
+
+        if ($exception instanceof ValidationException) {
+            return null;
+        }
+
+        if ($exception instanceof HttpException) {
+            return null;
         }
 
         Log::error($exception->getMessage(), [

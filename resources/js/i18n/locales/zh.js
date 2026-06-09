@@ -15,10 +15,19 @@ export default {
         count: ':count 个域名', submit: '批量查询', loading: '查询中…',
         successCount: ':success / :total 成功', success: '成功', error: '错误',
         expandAll: '全部展开', collapseAll: '全部折叠',
+        allFailed: '所有域名查询均失败。',
+        partialFailed: ':count 个域名查询失败。',
     },
     errors: {
         rateLimit: '请求过多，请稍后再试。',
-        generic: '发生错误。',
+        generic: '发生错误，请重试。',
+        codes: {
+            invalid_domain: '域名无效，请检查格式后重试。',
+            lookup_failed: '无法获取 whois 信息，服务器可能不可用。',
+            parse_failed: '无法处理该域名的 whois 数据。',
+            server_error: '服务器出现问题，请稍后重试。',
+            rate_limited: '请求过多，请稍后再试。',
+        },
     },
     features: {
         fast: { title: '快速查询', text: '缓存支持，重复查询即时返回。' },
