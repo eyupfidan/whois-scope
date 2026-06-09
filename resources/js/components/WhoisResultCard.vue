@@ -13,6 +13,7 @@ const { t, locale } = useI18n();
 const fields = computed(() => {
     const labels = {
         domain: 'fields.domain',
+        registration_status: 'fields.registration_status',
         registrar: 'fields.registrar',
         owner: 'fields.owner',
         created_at: 'fields.created_at',
@@ -32,6 +33,16 @@ const fields = computed(() => {
 
     return entries;
 });
+
+function formatRegistrationStatus(value) {
+    const map = {
+        registered: t('bulk.registered'),
+        available: t('bulk.available'),
+        unknown: t('bulk.unknown'),
+    };
+
+    return map[value] ?? value;
+}
 
 const dateLocale = computed(() => {
     const map = { en: 'en-US', tr: 'tr-TR', es: 'es-ES', zh: 'zh-CN', ar: 'ar-SA', pt: 'pt-BR', fr: 'fr-FR' };
@@ -64,7 +75,8 @@ function formatDate(value) {
             >
                 <dt class="text-sm font-medium text-slate-500">{{ field.label }}</dt>
                 <dd class="sm:col-span-2 text-sm text-slate-900 break-all" dir="ltr">
-                    <template v-if="field.key.includes('_at')">{{ formatDate(field.value) }}</template>
+                    <template v-if="field.key === 'registration_status'">{{ formatRegistrationStatus(field.value) }}</template>
+                    <template v-else-if="field.key.includes('_at')">{{ formatDate(field.value) }}</template>
                     <template v-else>{{ field.value }}</template>
                 </dd>
             </div>
