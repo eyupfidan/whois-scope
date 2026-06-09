@@ -3,6 +3,7 @@
 namespace App\Domain\Whois\Entities;
 
 use App\Domain\Whois\ValueObjects\DomainName;
+use App\Domain\Whois\ValueObjects\DomainRegistrationStatus;
 
 final readonly class WhoisRecord
 {
@@ -12,6 +13,7 @@ final readonly class WhoisRecord
      */
     public function __construct(
         public DomainName $domain,
+        public DomainRegistrationStatus $registrationStatus,
         public string $whoisServer,
         public ?string $registrar,
         public ?string $owner,
@@ -24,6 +26,16 @@ final readonly class WhoisRecord
         public string $raw,
     ) {}
 
+    public function isRegistered(): bool
+    {
+        return $this->registrationStatus === DomainRegistrationStatus::Registered;
+    }
+
+    public function isAvailable(): bool
+    {
+        return $this->registrationStatus === DomainRegistrationStatus::Available;
+    }
+
     /**
      * @return array<string, mixed>
      */
@@ -31,6 +43,7 @@ final readonly class WhoisRecord
     {
         return [
             'domain' => $this->domain->toString(),
+            'registration_status' => $this->registrationStatus->value,
             'registrar' => $this->registrar,
             'created_at' => $this->createdAt,
             'expires_at' => $this->expiresAt,
@@ -45,6 +58,7 @@ final readonly class WhoisRecord
     {
         return [
             'domain' => $this->domain->toString(),
+            'registration_status' => $this->registrationStatus->value,
             'whois_server' => $this->whoisServer,
             'registrar' => $this->registrar,
             'owner' => $this->owner,
@@ -65,6 +79,7 @@ final readonly class WhoisRecord
     {
         return [
             'domain' => $this->domain->toString(),
+            'registration_status' => $this->registrationStatus->value,
             'whois_server' => $this->whoisServer,
             'registrar' => $this->registrar,
             'owner' => $this->owner,
@@ -85,6 +100,9 @@ final readonly class WhoisRecord
     {
         return new self(
             domain: DomainName::fromValidated((string) $data['domain']),
+            registrationStatus: DomainRegistrationStatus::from(
+                (string) ($data['registration_status'] ?? DomainRegistrationStatus::Unknown->value),
+            ),
             whoisServer: (string) ($data['whois_server'] ?? ''),
             registrar: $data['registrar'] ?? null,
             owner: $data['owner'] ?? null,

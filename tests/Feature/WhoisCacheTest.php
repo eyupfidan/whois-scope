@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\Domain\Whois\Entities\WhoisRecord;
+use App\Domain\Whois\ValueObjects\DomainRegistrationStatus;
 use App\Domain\Whois\ValueObjects\DomainName;
 use App\Infrastructure\Whois\CachedWhoisRepository;
 use App\Infrastructure\Whois\PhpWhoisRepository;

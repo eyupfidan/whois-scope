@@ -67,7 +67,7 @@ class WhoisController extends Controller
 
         return [
             'domain' => $item->domain,
-            'status' => 'success',
+            'status' => $item->record->registrationStatus->value,
             'data' => match ($format) {
                 LookupFormat::Full => $item->record->toFull(),
                 LookupFormat::Summary => $item->record->toSummary(),

@@ -6,6 +6,7 @@ use App\Domain\Whois\Entities\WhoisRecord;
 use App\Domain\Whois\Exceptions\WhoisLookupException;
 use App\Domain\Whois\Exceptions\WhoisParseException;
 use App\Domain\Whois\Repositories\WhoisRepositoryInterface;
+use App\Domain\Whois\Services\RegistrationStatusDetector;
 use App\Domain\Whois\ValueObjects\DomainName;
 use Carbon\Carbon;
 use Iodev\Whois\Exceptions\ConnectionException;
@@ -20,8 +21,9 @@ class PhpWhoisRepository implements WhoisRepositoryInterface
 {
     private Whois $whois;
 
-    public function __construct()
-    {
+    public function __construct(
+        private readonly RegistrationStatusDetector $registrationStatusDetector,
+    ) {
         $this->whois = Factory::get()->createWhois();
         $this->registerCustomServers();
     }
@@ -58,8 +60,9 @@ class PhpWhoisRepository implements WhoisRepositoryInterface
     private function mapRecord(DomainName $domain, string $raw, ?TldInfo $info): WhoisRecord
     {
         if ($info === null) {
-            return new WhoisRecord(
+            return $this->buildRecord(
                 domain: $domain,
+                raw: $raw,
                 whoisServer: '',
                 registrar: null,
                 owner: null,
@@ -69,21 +72,71 @@ class PhpWhoisRepository implements WhoisRepositoryInterface
                 nameServers: [],
                 states: [],
                 dnssec: null,
-                raw: $raw,
             );
         }
 
-        return new WhoisRecord(
+        $registrar = $info->registrar ?: null;
+        $owner = $info->owner ?: null;
+        $createdAt = $this->formatTimestamp($info->creationDate);
+        $updatedAt = $this->formatTimestamp($info->updatedDate);
+        $expiresAt = $this->formatTimestamp($info->expirationDate);
+        $nameServers = array_values($info->nameServers);
+        $states = array_values($info->states);
+        $dnssec = $info->dnssec ?: null;
+
+        return $this->buildRecord(
             domain: DomainName::fromValidated($info->domainName ?: $domain->toString()),
+            raw: $raw,
             whoisServer: $info->whoisServer,
-            registrar: $info->registrar ?: null,
-            owner: $info->owner ?: null,
-            createdAt: $this->formatTimestamp($info->creationDate),
-            updatedAt: $this->formatTimestamp($info->updatedDate),
-            expiresAt: $this->formatTimestamp($info->expirationDate),
-            nameServers: array_values($info->nameServers),
-            states: array_values($info->states),
-            dnssec: $info->dnssec ?: null,
+            registrar: $registrar,
+            owner: $owner,
+            createdAt: $createdAt,
+            updatedAt: $updatedAt,
+            expiresAt: $expiresAt,
+            nameServers: $nameServers,
+            states: $states,
+            dnssec: $dnssec,
+        );
+    }
+
+    /**
+     * @param  list<string>  $nameServers
+     * @param  list<string>  $states
+     */
+    private function buildRecord(
+        DomainName $domain,
+        string $raw,
+        string $whoisServer,
+        ?string $registrar,
+        ?string $owner,
+        ?string $createdAt,
+        ?string $updatedAt,
+        ?string $expiresAt,
+        array $nameServers,
+        array $states,
+        ?string $dnssec,
+    ): WhoisRecord {
+        $registrationStatus = $this->registrationStatusDetector->detect(
+            raw: $raw,
+            registrar: $registrar,
+            createdAt: $createdAt,
+            expiresAt: $expiresAt,
+            nameServers: $nameServers,
+            states: $states,
+        );
+
+        return new WhoisRecord(
+            domain: $domain,
+            registrationStatus: $registrationStatus,
+            whoisServer: $whoisServer,
+            registrar: $registrar,
+            owner: $owner,
+            createdAt: $createdAt,
+            updatedAt: $updatedAt,
+            expiresAt: $expiresAt,
+            nameServers: $nameServers,
+            states: $states,
+            dnssec: $dnssec,
             raw: $raw,
         );
     }

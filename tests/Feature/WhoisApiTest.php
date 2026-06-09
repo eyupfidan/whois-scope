@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use App\Domain\Whois\Entities\WhoisRecord;
 use App\Domain\Whois\Repositories\WhoisRepositoryInterface;
+use App\Domain\Whois\ValueObjects\DomainRegistrationStatus;
 use App\Domain\Whois\ValueObjects\DomainName;
 use Tests\TestCase;
 
@@ -78,7 +79,7 @@ class WhoisApiTest extends TestCase
         $response
             ->assertOk()
             ->assertJsonPath('format', 'summary')
-            ->assertJsonPath('results.0.status', 'success')
+            ->assertJsonPath('results.0.status', 'registered')
             ->assertJsonPath('results.0.data.domain', 'example.com')
             ->assertJsonPath('results.1.status', 'error')
             ->assertJsonPath('results.1.code', 'invalid_domain');
@@ -117,6 +118,7 @@ class WhoisApiTest extends TestCase
     {
         return new WhoisRecord(
             domain: DomainName::fromValidated($domain),
+            registrationStatus: DomainRegistrationStatus::Registered,
             whoisServer: 'whois.iana.org',
             registrar: 'Example Registrar',
             owner: null,

@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use App\Domain\Whois\Entities\WhoisRecord;
 use App\Domain\Whois\Repositories\WhoisRepositoryInterface;
+use App\Domain\Whois\ValueObjects\DomainRegistrationStatus;
 use App\Domain\Whois\ValueObjects\DomainName;
 use Illuminate\Support\Facades\Cache;
 use Tests\TestCase;
@@ -35,6 +36,7 @@ class WhoisRateLimitTest extends TestCase
     {
         return new WhoisRecord(
             domain: DomainName::fromValidated('example.com'),
+            registrationStatus: DomainRegistrationStatus::Registered,
             whoisServer: 'whois.iana.org',
             registrar: 'Example Registrar',
             owner: null,
