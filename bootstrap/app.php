@@ -1,7 +1,7 @@
 <?php
 
-use App\Exceptions\Whois\InvalidDomainException;
-use App\Exceptions\Whois\WhoisLookupException;
+use App\Domain\Whois\Exceptions\InvalidDomainException;
+use App\Domain\Whois\Exceptions\WhoisLookupException;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;

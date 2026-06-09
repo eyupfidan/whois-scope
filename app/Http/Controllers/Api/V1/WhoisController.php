@@ -2,27 +2,75 @@
 
 namespace App\Http\Controllers\Api\V1;
 
+use App\Application\Whois\DTOs\BulkWhoisItemResult;
+use App\Application\Whois\UseCases\BulkLookupWhoisUseCase;
+use App\Application\Whois\UseCases\LookupWhoisUseCase;
+use App\Domain\Whois\Entities\WhoisRecord;
+use App\Domain\Whois\ValueObjects\LookupFormat;
 use App\Http\Controllers\Controller;
-use App\Http\Resources\WhoisResource;
-use App\Services\Whois\WhoisService;
+use App\Http\Requests\Api\V1\BulkLookupWhoisRequest;
+use App\Http\Requests\Api\V1\LookupWhoisRequest;
+use App\Http\Resources\WhoisFullResource;
+use App\Http\Resources\WhoisSummaryResource;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Resources\Json\JsonResource;
 
 class WhoisController extends Controller
 {
     public function __construct(
-        private readonly WhoisService $whoisService,
+        private readonly LookupWhoisUseCase $lookupWhoisUseCase,
+        private readonly BulkLookupWhoisUseCase $bulkLookupWhoisUseCase,
     ) {}
 
-    public function show(string $domain): WhoisResource
+    public function single(LookupWhoisRequest $request, string $domain): JsonResource
     {
-        return new WhoisResource($this->whoisService->lookup($domain));
+        $record = $this->lookupWhoisUseCase->execute($domain);
+
+        return $this->resourceFor($record, $request->lookupFormat());
     }
 
-    public function raw(string $domain): JsonResponse
+    public function bulk(BulkLookupWhoisRequest $request): JsonResponse
     {
+        $format = $request->lookupFormat();
+        $results = $this->bulkLookupWhoisUseCase->execute($request->domains());
+
         return response()->json([
-            'domain' => $domain,
-            'raw' => $this->whoisService->raw($domain),
+            'format' => $format->value,
+            'results' => array_map(
+                fn (BulkWhoisItemResult $item) => $this->formatBulkItem($item, $format),
+                $results,
+            ),
         ]);
+    }
+
+    private function resourceFor(WhoisRecord $record, LookupFormat $format): JsonResource
+    {
+        return match ($format) {
+            LookupFormat::Full => new WhoisFullResource($record),
+            LookupFormat::Summary => new WhoisSummaryResource($record),
+        };
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    private function formatBulkItem(BulkWhoisItemResult $item, LookupFormat $format): array
+    {
+        if (! $item->success) {
+            return [
+                'domain' => $item->domain,
+                'status' => 'error',
+                'message' => $item->message,
+            ];
+        }
+
+        return [
+            'domain' => $item->domain,
+            'status' => 'success',
+            'data' => match ($format) {
+                LookupFormat::Full => $item->record->toFull(),
+                LookupFormat::Summary => $item->record->toSummary(),
+            },
+        ];
     }
 }

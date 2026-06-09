@@ -25,4 +25,35 @@ return [
 
     'custom_servers' => [],
 
+    /*
+    |--------------------------------------------------------------------------
+    | Bulk Lookup Limit
+    |--------------------------------------------------------------------------
+    |
+    | Maximum number of domains allowed in a single bulk request.
+    |
+    */
+
+    'bulk_limit' => (int) env('WHOIS_BULK_LIMIT', 50),
+
+    /*
+    |--------------------------------------------------------------------------
+    | Cache
+    |--------------------------------------------------------------------------
+    */
+
+    'cache_enabled' => (bool) env('WHOIS_CACHE_ENABLED', true),
+
+    'cache_ttl' => (int) env('WHOIS_CACHE_TTL', 3600),
+
+    /*
+    |--------------------------------------------------------------------------
+    | Rate Limiting (requests per minute, per IP)
+    |--------------------------------------------------------------------------
+    */
+
+    'rate_limit' => (int) env('WHOIS_RATE_LIMIT', 60),
+
+    'bulk_rate_limit' => (int) env('WHOIS_BULK_RATE_LIMIT', 10),
+
 ];

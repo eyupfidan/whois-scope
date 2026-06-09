@@ -1,10 +1,11 @@
 <?php
 
-namespace App\Services\Whois;
+namespace App\Infrastructure\Whois;
 
-use App\Contracts\WhoisClient;
-use App\DTOs\WhoisLookupResult;
-use App\Exceptions\Whois\WhoisLookupException;
+use App\Domain\Whois\Entities\WhoisRecord;
+use App\Domain\Whois\Exceptions\WhoisLookupException;
+use App\Domain\Whois\Repositories\WhoisRepositoryInterface;
+use App\Domain\Whois\ValueObjects\DomainName;
 use Carbon\Carbon;
 use Iodev\Whois\Exceptions\ConnectionException;
 use Iodev\Whois\Exceptions\ServerMismatchException;
@@ -14,7 +15,7 @@ use Iodev\Whois\Modules\Tld\TldInfo;
 use Iodev\Whois\Modules\Tld\TldServer;
 use Iodev\Whois\Whois;
 
-class PhpWhoisClient implements WhoisClient
+class PhpWhoisRepository implements WhoisRepositoryInterface
 {
     private Whois $whois;
 
@@ -24,24 +25,17 @@ class PhpWhoisClient implements WhoisClient
         $this->registerCustomServers();
     }
 
-    public function lookup(string $domain): WhoisLookupResult
+    public function lookup(DomainName $domain): WhoisRecord
     {
-        try {
-            $response = $this->whois->lookupDomain($domain);
-            $info = $this->whois->loadDomainInfo($domain);
+        $domainValue = $domain->toString();
 
-            return $this->mapResult($domain, $response->text, $info);
-        } catch (ConnectionException|ServerMismatchException|WhoisException $exception) {
-            throw new WhoisLookupException($domain, $exception);
-        }
-    }
-
-    public function raw(string $domain): string
-    {
         try {
-            return $this->whois->lookupDomain($domain)->text;
+            $response = $this->whois->lookupDomain($domainValue);
+            $info = $this->whois->loadDomainInfo($domainValue);
+
+            return $this->mapRecord($domain, $response->text, $info);
         } catch (ConnectionException|ServerMismatchException|WhoisException $exception) {
-            throw new WhoisLookupException($domain, $exception);
+            throw new WhoisLookupException($domainValue, $exception);
         }
     }
 
@@ -58,10 +52,10 @@ class PhpWhoisClient implements WhoisClient
         );
     }
 
-    private function mapResult(string $domain, string $raw, ?TldInfo $info): WhoisLookupResult
+    private function mapRecord(DomainName $domain, string $raw, ?TldInfo $info): WhoisRecord
     {
         if ($info === null) {
-            return new WhoisLookupResult(
+            return new WhoisRecord(
                 domain: $domain,
                 whoisServer: '',
                 registrar: null,
@@ -76,8 +70,8 @@ class PhpWhoisClient implements WhoisClient
             );
         }
 
-        return new WhoisLookupResult(
-            domain: $info->domainName ?: $domain,
+        return new WhoisRecord(
+            domain: DomainName::fromValidated($info->domainName ?: $domain->toString()),
             whoisServer: $info->whoisServer,
             registrar: $info->registrar ?: null,
             owner: $info->owner ?: null,

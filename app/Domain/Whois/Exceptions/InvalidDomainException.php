@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Exceptions\Whois;
+namespace App\Domain\Whois\Exceptions;
 
 use Exception;
 

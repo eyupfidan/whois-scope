@@ -3,10 +3,11 @@
 use App\Http\Controllers\Api\V1\WhoisController;
 use Illuminate\Support\Facades\Route;
 
-Route::prefix('v1')->group(function (): void {
-    Route::get('whois/{domain}/raw', [WhoisController::class, 'raw'])
-        ->where('domain', '[^/]+(?:\.[^/]+)*');
+Route::prefix('v1/whois')->group(function (): void {
+    Route::post('bulk', [WhoisController::class, 'bulk'])
+        ->middleware('throttle:whois-bulk');
 
-    Route::get('whois/{domain}', [WhoisController::class, 'show'])
+    Route::get('{domain}', [WhoisController::class, 'single'])
+        ->middleware('throttle:whois')
         ->where('domain', '[^/]+(?:\.[^/]+)*');
 });

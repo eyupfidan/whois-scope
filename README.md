@@ -1,11 +1,12 @@
 # WHOIS API
 
-Laravel 13 tabanlı, geniş TLD desteği hedefleyen WHOIS sorgulama API'si.
+Laravel 13 tabanlı WHOIS sorgulama platformu. **REST API** olarak veya **full-stack web uygulaması** olarak kullanılabilir. Domain Driven Design (DDD) mimarisi ile yapılandırılmıştır.
 
 ## Gereksinimler
 
 - PHP 8.3+
 - Composer
+- Node.js 20+ (frontend için)
 
 ## Kurulum
 
@@ -14,52 +15,75 @@ composer install
 cp .env.example .env
 php artisan key:generate
 php artisan migrate
+
+npm install
+npm run build   # production
+# veya geliştirme için: npm run dev
 ```
 
-## Geliştirme sunucusu
+## Kullanım modları
+
+### Full-stack (web arayüzü)
 
 ```bash
 php artisan serve
+# Ayrı terminalde: npm run dev
 ```
+
+Tarayıcıda `http://localhost:8000` — [WhoisTR.net](https://whoistr.net/) tarzında Vue.js arayüzü.
+
+### Sadece API
+
+API uç noktaları `/api/v1/whois/*` altında bağımsız çalışır. Frontend olmadan doğrudan entegre edilebilir.
 
 ## API uç noktaları
 
-| Method | Endpoint | Açıklama |
-|--------|----------|----------|
-| GET | `/api/v1/whois/{domain}` | Parse edilmiş WHOIS bilgisi |
-| GET | `/api/v1/whois/{domain}/raw` | Ham WHOIS metni |
+| Method | Endpoint | Rate limit |
+|--------|----------|------------|
+| GET | `/api/v1/whois/{domain}?format=summary\|full` | 60/dk (IP) |
+| POST | `/api/v1/whois/bulk` | 10/dk (IP) |
 
-### Örnek
+### Format
+
+| Değer | Alanlar |
+|-------|---------|
+| `summary` (varsayılan) | domain, registrar, created_at, expires_at, states |
+| `full` | Tüm alanlar + ham WHOIS (`raw`) |
+
+### Örnekler
 
 ```bash
-curl http://localhost:8000/api/v1/whois/google.com
-curl http://localhost:8000/api/v1/whois/google.com/raw
+curl "http://localhost:8000/api/v1/whois/google.com?format=summary"
+
+curl -X POST http://localhost:8000/api/v1/whois/bulk \
+  -H "Content-Type: application/json" \
+  -d '{"domains":["google.com","example.com"],"format":"full"}'
 ```
 
-## Mimari
+## Mimari (DDD)
 
 ```
 app/
-├── Contracts/WhoisClient.php      # WHOIS istemci arayüzü
-├── DTOs/WhoisLookupResult.php     # Sorgu sonucu veri modeli
-├── Exceptions/Whois/              # Domain ve sorgu hataları
-├── Http/Controllers/Api/V1/       # API controller'ları
-├── Http/Resources/                # JSON response dönüşümleri
-└── Services/Whois/
-    ├── DomainValidator.php        # Domain doğrulama ve normalizasyon
-    ├── PhpWhoisClient.php         # io-developer/php-whois entegrasyonu
-    └── WhoisService.php           # İş mantığı katmanı
+├── Domain/Whois/           # İş kuralları
+├── Application/Whois/      # Use case'ler
+├── Infrastructure/Whois/   # php-whois + cache decorator
+└── Http/                   # API + Vue sunumu
+resources/js/               # Vue 3 frontend
 ```
-
-WHOIS sorguları [io-developer/php-whois](https://github.com/io-developer/php-whois) kütüphanesi üzerinden yapılır. Kütüphane yüzlerce TLD için yerleşik WHOIS sunucu eşlemesi sunar; `config/whois.php` dosyasından özel sunucular eklenebilir.
 
 ## Yapılandırma
 
-`.env` dosyasına eklenebilecek değişkenler:
-
-```
+```env
 WHOIS_TIMEOUT=20
+WHOIS_BULK_LIMIT=50
+WHOIS_CACHE_ENABLED=true
+WHOIS_CACHE_TTL=3600
+WHOIS_RATE_LIMIT=60
+WHOIS_BULK_RATE_LIMIT=10
+CACHE_STORE=database
 ```
+
+WHOIS sonuçları varsayılan olarak **1 saat** önbellekte tutulur (`WHOIS_CACHE_TTL`).
 
 ## Testler
 
