@@ -13,6 +13,7 @@ use Iodev\Whois\Exceptions\ConnectionException;
 use Iodev\Whois\Exceptions\ServerMismatchException;
 use Iodev\Whois\Exceptions\WhoisException;
 use Iodev\Whois\Factory;
+use Iodev\Whois\Loaders\SocketLoader;
 use Iodev\Whois\Modules\Tld\TldInfo;
 use Iodev\Whois\Modules\Tld\TldServer;
 use Iodev\Whois\Whois;
@@ -24,8 +25,13 @@ class PhpWhoisRepository implements WhoisRepositoryInterface
     public function __construct(
         private readonly RegistrationStatusDetector $registrationStatusDetector,
     ) {
-        $this->whois = Factory::get()->createWhois();
-        $this->registerCustomServers();
+        $this->whois = self::withoutDeprecations(function (): Whois {
+            $loader = new SocketLoader((int) config('whois.timeout', 10));
+            $whois = Factory::get()->createWhois($loader);
+            $this->registerCustomServersOn($whois);
+
+            return $whois;
+        });
     }
 
     public function lookup(DomainName $domain): WhoisRecord
@@ -33,10 +39,17 @@ class PhpWhoisRepository implements WhoisRepositoryInterface
         $domainValue = $domain->toString();
 
         try {
-            $response = $this->whois->lookupDomain($domainValue);
-            $info = $this->whois->loadDomainInfo($domainValue);
+            return $this->withoutVendorDeprecations(function () use ($domain, $domainValue): WhoisRecord {
+                $tldModule = $this->whois->getTldModule();
+                [$response, $info] = $tldModule->loadDomainData(
+                    $domainValue,
+                    $tldModule->matchServers($domainValue),
+                );
 
-            return $this->mapRecord($domain, $response->text, $info);
+                $raw = $response?->text ?? '';
+
+                return $this->mapRecord($domain, $raw, $info);
+            });
         } catch (ConnectionException|ServerMismatchException|WhoisException $exception) {
             throw new WhoisLookupException($domainValue, $exception);
         } catch (\Throwable $exception) {
@@ -44,7 +57,37 @@ class PhpWhoisRepository implements WhoisRepositoryInterface
         }
     }
 
-    private function registerCustomServers(): void
+    /**
+     * @template TReturn
+     *
+     * @param  callable(): TReturn  $callback
+     * @return TReturn
+     */
+    private function withoutVendorDeprecations(callable $callback): mixed
+    {
+        return self::withoutDeprecations($callback);
+    }
+
+    /**
+     * @template TReturn
+     *
+     * @param  callable(): TReturn  $callback
+     * @return TReturn
+     */
+    private static function withoutDeprecations(callable $callback): mixed
+    {
+        $previousReporting = error_reporting();
+
+        error_reporting($previousReporting & ~E_DEPRECATED);
+
+        try {
+            return $callback();
+        } finally {
+            error_reporting($previousReporting);
+        }
+    }
+
+    private function registerCustomServersOn(Whois $whois): void
     {
         $servers = config('whois.custom_servers', []);
 
@@ -52,7 +95,7 @@ class PhpWhoisRepository implements WhoisRepositoryInterface
             return;
         }
 
-        $this->whois->getTldModule()->addServers(
+        $whois->getTldModule()->addServers(
             TldServer::fromDataList($servers)
         );
     }

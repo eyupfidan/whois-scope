@@ -25,6 +25,8 @@ class BulkLookupWhoisUseCase
      */
     public function execute(array $domainInputs): array
     {
+        $this->ensureExecutionBudget(count($domainInputs));
+
         $results = [];
 
         foreach ($domainInputs as $domainInput) {
@@ -32,6 +34,19 @@ class BulkLookupWhoisUseCase
         }
 
         return $results;
+    }
+
+    private function ensureExecutionBudget(int $domainCount): void
+    {
+        if ($domainCount <= 0) {
+            return;
+        }
+
+        $timeout = max(1, (int) config('whois.timeout', 10));
+        $maxExecution = max(30, (int) config('whois.bulk_max_execution', 300));
+        $budget = min($maxExecution, max(30, ($domainCount * $timeout * 3) + 15));
+
+        set_time_limit($budget);
     }
 
     private function lookupSingle(string $domainInput): BulkWhoisItemResult

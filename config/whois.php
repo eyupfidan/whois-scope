@@ -11,7 +11,18 @@ return [
     |
     */
 
-    'timeout' => (int) env('WHOIS_TIMEOUT', 20),
+    'timeout' => (int) env('WHOIS_TIMEOUT', 10),
+
+    /*
+    |--------------------------------------------------------------------------
+    | Bulk Request Time Budget
+    |--------------------------------------------------------------------------
+    |
+    | Maximum PHP execution time (seconds) allowed for a bulk WHOIS request.
+    |
+    */
+
+    'bulk_max_execution' => (int) env('WHOIS_BULK_MAX_EXECUTION', 300),
 
     /*
     |--------------------------------------------------------------------------
