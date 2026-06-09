@@ -36,7 +36,7 @@ export default {
         secure: { title: 'API آمن', text: 'حد معدل الطلبات ضد الإساءة.' },
         tld: { title: 'دعم TLD واسع', text: 'Whois لـ .com و .net و .tr ومئات الامتدادات.' },
     },
-    footer: { tagline: 'متاح كـ REST API وتطبيق ويب full-stack.' },
+    footer: { tagline: 'متاح كـ REST API وتطبيق ويب full-stack.', license: 'منشور تحت رخصة MIT.' },
     fields: {
         domain: 'النطاق', registration_status: 'حالة التسجيل', registrar: 'المسجل', owner: 'المالك', created_at: 'تاريخ الإنشاء',
         updated_at: 'تاريخ التحديث', expires_at: 'تاريخ الانتهاء', whois_server: 'خادم Whois',

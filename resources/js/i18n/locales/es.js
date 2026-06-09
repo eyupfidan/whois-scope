@@ -36,7 +36,7 @@ export default {
         secure: { title: 'API Segura', text: 'Límite de velocidad contra abusos.' },
         tld: { title: 'Amplio Soporte TLD', text: 'Whois para .com, .net, .tr y cientos de extensiones.' },
     },
-    footer: { tagline: 'Disponible como API REST y aplicación web full-stack.' },
+    footer: { tagline: 'Disponible como API REST y aplicación web full-stack.', license: 'Publicado bajo la licencia MIT.' },
     fields: {
         domain: 'Dominio', registration_status: 'Registro', registrar: 'Registrador', owner: 'Propietario', created_at: 'Creado',
         updated_at: 'Actualizado', expires_at: 'Expira', whois_server: 'Servidor whois',

@@ -36,7 +36,7 @@ export default {
         secure: { title: '安全 API', text: '速率限制防止滥用。' },
         tld: { title: '广泛 TLD 支持', text: '支持 .com、.net、.tr 及数百种后缀。' },
     },
-    footer: { tagline: '可作为 REST API 和全栈 Web 应用使用。' },
+    footer: { tagline: '可作为 REST API 和全栈 Web 应用使用。', license: '基于 MIT 许可证发布。' },
     fields: {
         domain: '域名', registration_status: '注册状态', registrar: '注册商', owner: '所有者', created_at: '创建时间',
         updated_at: '更新时间', expires_at: '过期时间', whois_server: 'Whois 服务器',

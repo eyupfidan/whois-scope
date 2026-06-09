@@ -36,7 +36,7 @@ export default {
         secure: { title: 'Güvenli API', text: 'Rate limit koruması ile kötüye kullanıma karşı güvenli erişim.' },
         tld: { title: 'Geniş TLD Desteği', text: '.com, .net, .tr ve yüzlerce uzantı için whois sorgusu.' },
     },
-    footer: { tagline: 'REST API ve full-stack web arayüzü olarak kullanılabilir.' },
+    footer: { tagline: 'REST API ve full-stack web arayüzü olarak kullanılabilir.', license: 'MIT Lisansı ile yayınlanmıştır.' },
     fields: {
         domain: 'Domain', registration_status: 'Kayıt durumu', registrar: 'Kayıt firması', owner: 'Sahip', created_at: 'Oluşturulma',
         updated_at: 'Güncellenme', expires_at: 'Bitiş tarihi', whois_server: 'Whois sunucusu',

@@ -67,6 +67,7 @@ export default {
     },
     footer: {
         tagline: 'Available as REST API and full-stack web app.',
+        license: 'Released under the MIT License.',
     },
     fields: {
         domain: 'Domain',

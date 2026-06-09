@@ -111,3 +111,7 @@ WHOIS results are cached for **1 hour** by default (`WHOIS_CACHE_TTL`).
 ```bash
 php artisan test
 ```
+
+## License
+
+WhoisScope is open source software licensed under the [MIT License](LICENSE). You are free to use, modify, and distribute it for personal or commercial projects.
