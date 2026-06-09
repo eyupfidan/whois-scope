@@ -1,0 +1,51 @@
+export default {
+    nav: { home: 'الرئيسية', apiDocs: 'وثائق API', language: 'اللغة' },
+    hero: {
+        title: 'بحث Whois سريع وآمن',
+        subtitle: 'استعلم عن معلومات تسجيل النطاق في ثوانٍ. دعم فردي وجماعي.',
+    },
+    tabs: { domain: 'Whois نطاق', bulk: 'Whois جماعي' },
+    domain: {
+        label: 'اسم النطاق', placeholder: 'example.com', submit: 'بحث', loading: 'جاري البحث…',
+        format: 'التنسيق', summary: 'ملخص', full: 'كامل',
+    },
+    bulk: {
+        label: 'قائمة النطاقات', hint: '(سطر واحد أو مفصولة بفاصلة، حد 50)',
+        placeholder: 'example.com\ngoogle.com\ngithub.com',
+        count: ':count نطاق', submit: 'بحث جماعي', loading: 'جاري البحث…',
+        successCount: ':success / :total ناجح', success: 'نجاح', error: 'خطأ',
+        expandAll: 'توسيع الكل', collapseAll: 'طي الكل',
+    },
+    errors: {
+        rateLimit: 'طلبات كثيرة. يرجى الانتظار.',
+        generic: 'حدث خطأ.',
+    },
+    features: {
+        fast: { title: 'بحث سريع', text: 'استجابات مخزنة فورية للاستعلامات المتكررة.' },
+        secure: { title: 'API آمن', text: 'حد معدل الطلبات ضد الإساءة.' },
+        tld: { title: 'دعم TLD واسع', text: 'Whois لـ .com و .net و .tr ومئات الامتدادات.' },
+    },
+    footer: { tagline: 'متاح كـ REST API وتطبيق ويب full-stack.' },
+    fields: {
+        domain: 'النطاق', registrar: 'المسجل', owner: 'المالك', created_at: 'تاريخ الإنشاء',
+        updated_at: 'تاريخ التحديث', expires_at: 'تاريخ الانتهاء', whois_server: 'خادم Whois',
+        dnssec: 'DNSSEC', states: 'الحالة', name_servers: 'خوادم الأسماء', raw: 'Whois خام',
+    },
+    docs: {
+        title: 'وثائق API',
+        subtitle: 'مرجع WhoisScope REST API للمطورين.',
+        baseUrl: 'URL الأساسي', auth: 'المصادقة',
+        authText: 'لا يلزم مصادقة. الطلبات محدودة حسب IP.',
+        rateLimits: 'حدود المعدل', rateSingle: 'بحث فردي', rateBulk: 'بحث جماعي', perMinute: 'طلب / دقيقة',
+        caching: 'التخزين المؤقت',
+        cachingText: 'النتائج مخزنة :ttl ثانية. الاستعلامات المتكررة قد تعيد بيانات مخزنة.',
+        formats: 'تنسيقات الاستجابة',
+        formatSummary: 'حقول أساسية: domain, registrar, created_at, expires_at, states.',
+        formatFull: 'جميع الحقول المحللة + نص whois خام.',
+        endpoints: 'نقاط النهاية', singleTitle: 'بحث فردي', singleDesc: 'Whois لنطاق واحد.',
+        bulkTitle: 'بحث جماعي', bulkDesc: 'عدة نطاقات في طلب واحد. الأخطاء لا توقف الباقي.',
+        queryParams: 'معاملات الاستعلام', requestBody: 'جسم الطلب', response: 'الاستجابة', errors: 'أخطاء',
+        error422: 'اسم نطاق غير صالح.', error429: 'تجاوز حد المعدل.',
+        error502: 'فشل بحث Whois.', example: 'مثال',
+    },
+};

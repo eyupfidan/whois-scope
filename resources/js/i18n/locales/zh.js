@@ -1,0 +1,51 @@
+export default {
+    nav: { home: '首页', apiDocs: 'API 文档', language: '语言' },
+    hero: {
+        title: '快速安全的 Whois 查询',
+        subtitle: '秒级查询域名注册信息。支持单个和批量 Whois 查询。',
+    },
+    tabs: { domain: '域名 Whois', bulk: '批量 Whois' },
+    domain: {
+        label: '域名', placeholder: 'example.com', submit: '查询', loading: '查询中…',
+        format: '格式', summary: '摘要', full: '完整',
+    },
+    bulk: {
+        label: '域名列表', hint: '（每行一个或逗号分隔，最多 50 个）',
+        placeholder: 'example.com\ngoogle.com\ngithub.com',
+        count: ':count 个域名', submit: '批量查询', loading: '查询中…',
+        successCount: ':success / :total 成功', success: '成功', error: '错误',
+        expandAll: '全部展开', collapseAll: '全部折叠',
+    },
+    errors: {
+        rateLimit: '请求过多，请稍后再试。',
+        generic: '发生错误。',
+    },
+    features: {
+        fast: { title: '快速查询', text: '缓存支持，重复查询即时返回。' },
+        secure: { title: '安全 API', text: '速率限制防止滥用。' },
+        tld: { title: '广泛 TLD 支持', text: '支持 .com、.net、.tr 及数百种后缀。' },
+    },
+    footer: { tagline: '可作为 REST API 和全栈 Web 应用使用。' },
+    fields: {
+        domain: '域名', registrar: '注册商', owner: '所有者', created_at: '创建时间',
+        updated_at: '更新时间', expires_at: '过期时间', whois_server: 'Whois 服务器',
+        dnssec: 'DNSSEC', states: '状态', name_servers: '域名服务器', raw: '原始 Whois',
+    },
+    docs: {
+        title: 'API 文档',
+        subtitle: 'WhoisScope REST API 开发者参考。',
+        baseUrl: '基础 URL', auth: '身份验证',
+        authText: '无需身份验证。请求按 IP 地址限速。',
+        rateLimits: '速率限制', rateSingle: '单个查询', rateBulk: '批量查询', perMinute: '请求/分钟',
+        caching: '缓存',
+        cachingText: '结果缓存 :ttl 秒（可配置）。重复查询可能返回缓存数据。',
+        formats: '响应格式',
+        formatSummary: '基本字段：domain、registrar、created_at、expires_at、states。',
+        formatFull: '所有解析字段及原始 whois 文本。',
+        endpoints: '端点', singleTitle: '单个查询', singleDesc: '查询单个域名的 whois 信息。',
+        bulkTitle: '批量查询', bulkDesc: '一次请求查询多个域名。单个失败不影响其他。',
+        queryParams: '查询参数', requestBody: '请求体', response: '响应', errors: '错误响应',
+        error422: '无效域名。', error429: '超出速率限制。',
+        error502: 'Whois 查询失败。', example: '示例',
+    },
+};

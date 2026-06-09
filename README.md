@@ -1,14 +1,30 @@
-# WHOIS API
+# WhoisScope
 
-Laravel 13 tabanlı WHOIS sorgulama platformu. **REST API** olarak veya **full-stack web uygulaması** olarak kullanılabilir. Domain Driven Design (DDD) mimarisi ile yapılandırılmıştır.
+A Laravel 13 WHOIS lookup platform with a Vue.js frontend. Use it as a **REST API** or a **full-stack web application**. Built with Domain Driven Design (DDD).
 
-## Gereksinimler
+**API Documentation:** [http://localhost:8000/docs](http://localhost:8000/docs) (when running locally)
+
+## Languages
+
+The web UI supports **7 languages** (default: English):
+
+| Code | Language |
+|------|----------|
+| `en` | English (default) |
+| `es` | Español |
+| `zh` | 中文 |
+| `ar` | العربية |
+| `pt` | Português |
+| `fr` | Français |
+| `tr` | Türkçe |
+
+## Requirements
 
 - PHP 8.3+
 - Composer
-- Node.js 20+ (frontend için)
+- Node.js 20+ (frontend)
 
-## Kurulum
+## Installation
 
 ```bash
 composer install
@@ -18,39 +34,44 @@ php artisan migrate
 
 npm install
 npm run build   # production
-# veya geliştirme için: npm run dev
+# or for development: npm run dev
 ```
 
-## Kullanım modları
+## Usage modes
 
-### Full-stack (web arayüzü)
+### Full-stack (web UI)
 
 ```bash
 php artisan serve
-# Ayrı terminalde: npm run dev
+# separate terminal: npm run dev
 ```
 
-Tarayıcıda `http://localhost:8000` — [WhoisTR.net](https://whoistr.net/) tarzında Vue.js arayüzü.
+Open `http://localhost:8000` — Whois lookup interface inspired by [WhoisTR.net](https://whoistr.net/).
 
-### Sadece API
+- **Home:** `/`
+- **API Docs:** `/docs`
 
-API uç noktaları `/api/v1/whois/*` altında bağımsız çalışır. Frontend olmadan doğrudan entegre edilebilir.
+### API only
 
-## API uç noktaları
+Endpoints under `/api/v1/whois/*` work independently without the frontend.
+
+## API endpoints
 
 | Method | Endpoint | Rate limit |
 |--------|----------|------------|
-| GET | `/api/v1/whois/{domain}?format=summary\|full` | 60/dk (IP) |
-| POST | `/api/v1/whois/bulk` | 10/dk (IP) |
+| GET | `/api/v1/whois/{domain}?format=summary\|full` | 60/min (IP) |
+| POST | `/api/v1/whois/bulk` | 10/min (IP) |
 
-### Format
+See full documentation at **`/docs`** or below.
 
-| Değer | Alanlar |
-|-------|---------|
-| `summary` (varsayılan) | domain, registrar, created_at, expires_at, states |
-| `full` | Tüm alanlar + ham WHOIS (`raw`) |
+### Format parameter
 
-### Örnekler
+| Value | Fields |
+|-------|--------|
+| `summary` (default) | domain, registrar, created_at, expires_at, states |
+| `full` | All fields + raw WHOIS text |
+
+### Examples
 
 ```bash
 curl "http://localhost:8000/api/v1/whois/google.com?format=summary"
@@ -60,18 +81,18 @@ curl -X POST http://localhost:8000/api/v1/whois/bulk \
   -d '{"domains":["google.com","example.com"],"format":"full"}'
 ```
 
-## Mimari (DDD)
+## Architecture (DDD)
 
 ```
 app/
-├── Domain/Whois/           # İş kuralları
-├── Application/Whois/      # Use case'ler
+├── Domain/Whois/           # Business rules
+├── Application/Whois/      # Use cases
 ├── Infrastructure/Whois/   # php-whois + cache decorator
-└── Http/                   # API + Vue sunumu
-resources/js/               # Vue 3 frontend
+└── Http/                   # API layer
+resources/js/               # Vue 3 frontend + i18n
 ```
 
-## Yapılandırma
+## Configuration
 
 ```env
 WHOIS_TIMEOUT=20
@@ -83,9 +104,9 @@ WHOIS_BULK_RATE_LIMIT=10
 CACHE_STORE=database
 ```
 
-WHOIS sonuçları varsayılan olarak **1 saat** önbellekte tutulur (`WHOIS_CACHE_TTL`).
+WHOIS results are cached for **1 hour** by default (`WHOIS_CACHE_TTL`).
 
-## Testler
+## Tests
 
 ```bash
 php artisan test

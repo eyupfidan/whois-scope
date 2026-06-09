@@ -1,0 +1,51 @@
+export default {
+    nav: { home: 'Ana Sayfa', apiDocs: 'API Dokümantasyonu', language: 'Dil' },
+    hero: {
+        title: 'Hızlı & Güvenli Whois Sorgulama',
+        subtitle: 'Domain kayıt bilgilerini saniyeler içinde sorgulayın. Tekil ve toplu whois desteği.',
+    },
+    tabs: { domain: 'Domain Whois', bulk: 'Toplu Whois' },
+    domain: {
+        label: 'Domain adı', placeholder: 'ornek.com', submit: 'Sorgula', loading: 'Sorgulanıyor…',
+        format: 'Format', summary: 'Özet', full: 'Tam',
+    },
+    bulk: {
+        label: 'Domain listesi', hint: '(satır veya virgülle ayırın, max 50)',
+        placeholder: 'ornek.com\ngoogle.com\ngithub.com',
+        count: ':count domain', submit: 'Toplu Sorgula', loading: 'Sorgulanıyor…',
+        successCount: ':success / :total başarılı', success: 'Başarılı', error: 'Hata',
+        expandAll: 'Tümünü aç', collapseAll: 'Tümünü kapat',
+    },
+    errors: {
+        rateLimit: 'Çok fazla istek gönderdiniz. Lütfen biraz bekleyin.',
+        generic: 'Bir hata oluştu.',
+    },
+    features: {
+        fast: { title: 'Hızlı Sorgulama', text: 'Önbellek desteği ile tekrarlayan sorgularda anında yanıt alın.' },
+        secure: { title: 'Güvenli API', text: 'Rate limit koruması ile kötüye kullanıma karşı güvenli erişim.' },
+        tld: { title: 'Geniş TLD Desteği', text: '.com, .net, .tr ve yüzlerce uzantı için whois sorgusu.' },
+    },
+    footer: { tagline: 'REST API ve full-stack web arayüzü olarak kullanılabilir.' },
+    fields: {
+        domain: 'Domain', registrar: 'Kayıt firması', owner: 'Sahip', created_at: 'Oluşturulma',
+        updated_at: 'Güncellenme', expires_at: 'Bitiş tarihi', whois_server: 'Whois sunucusu',
+        dnssec: 'DNSSEC', states: 'Durum', name_servers: 'Name server', raw: 'Ham Whois',
+    },
+    docs: {
+        title: 'API Dokümantasyonu',
+        subtitle: 'WhoisScope REST API geliştirici referansı.',
+        baseUrl: 'Temel URL', auth: 'Kimlik Doğrulama',
+        authText: 'Kimlik doğrulama gerekmez. İstekler IP adresine göre rate limit uygulanır.',
+        rateLimits: 'Rate Limit', rateSingle: 'Tekil sorgu', rateBulk: 'Toplu sorgu', perMinute: 'istek / dakika',
+        caching: 'Önbellek',
+        cachingText: 'Sonuçlar :ttl saniye önbellekte tutulur (yapılandırılabilir). Aynı domain tekrar sorgulandığında önbellekten dönebilir.',
+        formats: 'Yanıt Formatları',
+        formatSummary: 'Temel alanlar: domain, registrar, created_at, expires_at, states.',
+        formatFull: 'Tüm parse edilmiş alanlar + ham whois metni.',
+        endpoints: 'Uç Noktalar', singleTitle: 'Tekil sorgu', singleDesc: 'Tek bir domain için whois bilgisi.',
+        bulkTitle: 'Toplu sorgu', bulkDesc: 'Birden fazla domain tek istekte sorgulanır. Hatalar diğer sorguları durdurmaz.',
+        queryParams: 'Sorgu parametreleri', requestBody: 'İstek gövdesi', response: 'Yanıt', errors: 'Hata Yanıtları',
+        error422: 'Geçersiz domain adı.', error429: 'Rate limit aşıldı.',
+        error502: 'Whois sorgusu başarısız (sunucu erişilemez veya TLD desteklenmiyor).', example: 'Örnek',
+    },
+};

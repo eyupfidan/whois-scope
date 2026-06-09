@@ -1,0 +1,51 @@
+export default {
+    nav: { home: 'Início', apiDocs: 'Documentação API', language: 'Idioma' },
+    hero: {
+        title: 'Consulta Whois Rápida e Segura',
+        subtitle: 'Consulte informações de registro de domínios em segundos. Suporte individual e em massa.',
+    },
+    tabs: { domain: 'Whois de Domínio', bulk: 'Whois em Massa' },
+    domain: {
+        label: 'Nome do domínio', placeholder: 'exemplo.com', submit: 'Consultar', loading: 'Consultando…',
+        format: 'Formato', summary: 'Resumo', full: 'Completo',
+    },
+    bulk: {
+        label: 'Lista de domínios', hint: '(um por linha ou separados por vírgula, máx. 50)',
+        placeholder: 'exemplo.com\ngoogle.com\ngithub.com',
+        count: ':count domínio(s)', submit: 'Consulta em Massa', loading: 'Consultando…',
+        successCount: ':success / :total com sucesso', success: 'Sucesso', error: 'Erro',
+        expandAll: 'Expandir tudo', collapseAll: 'Recolher tudo',
+    },
+    errors: {
+        rateLimit: 'Muitas solicitações. Aguarde um momento.',
+        generic: 'Algo deu errado.',
+    },
+    features: {
+        fast: { title: 'Consulta Rápida', text: 'Respostas em cache instantâneas para consultas repetidas.' },
+        secure: { title: 'API Segura', text: 'Limite de taxa contra abusos.' },
+        tld: { title: 'Amplo Suporte TLD', text: 'Whois para .com, .net, .tr e centenas de extensões.' },
+    },
+    footer: { tagline: 'Disponível como API REST e aplicação web full-stack.' },
+    fields: {
+        domain: 'Domínio', registrar: 'Registrador', owner: 'Proprietário', created_at: 'Criado',
+        updated_at: 'Atualizado', expires_at: 'Expira', whois_server: 'Servidor whois',
+        dnssec: 'DNSSEC', states: 'Status', name_servers: 'Servidores de nomes', raw: 'Whois bruto',
+    },
+    docs: {
+        title: 'Documentação API',
+        subtitle: 'Referência da API REST WhoisScope para desenvolvedores.',
+        baseUrl: 'URL base', auth: 'Autenticação',
+        authText: 'Sem autenticação necessária. Solicitações limitadas por IP.',
+        rateLimits: 'Limites de taxa', rateSingle: 'Consulta individual', rateBulk: 'Consulta em massa', perMinute: 'solicitações / minuto',
+        caching: 'Cache',
+        cachingText: 'Resultados em cache por :ttl segundos. Consultas repetidas podem retornar dados em cache.',
+        formats: 'Formatos de resposta',
+        formatSummary: 'Campos essenciais: domain, registrar, created_at, expires_at, states.',
+        formatFull: 'Todos os campos parseados mais texto whois bruto.',
+        endpoints: 'Endpoints', singleTitle: 'Consulta individual', singleDesc: 'Whois para um domínio.',
+        bulkTitle: 'Consulta em massa', bulkDesc: 'Vários domínios em uma solicitação. Erros não param os outros.',
+        queryParams: 'Parâmetros de consulta', requestBody: 'Corpo da solicitação', response: 'Resposta', errors: 'Erros',
+        error422: 'Nome de domínio inválido.', error429: 'Limite de taxa excedido.',
+        error502: 'Consulta whois falhou.', example: 'Exemplo',
+    },
+};

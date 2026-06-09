@@ -1,0 +1,51 @@
+export default {
+    nav: { home: 'Inicio', apiDocs: 'Documentación API', language: 'Idioma' },
+    hero: {
+        title: 'Consulta Whois Rápida y Segura',
+        subtitle: 'Consulte información de registro de dominios en segundos. Soporte individual y masivo.',
+    },
+    tabs: { domain: 'Whois de Dominio', bulk: 'Whois Masivo' },
+    domain: {
+        label: 'Nombre de dominio', placeholder: 'ejemplo.com', submit: 'Consultar', loading: 'Consultando…',
+        format: 'Formato', summary: 'Resumen', full: 'Completo',
+    },
+    bulk: {
+        label: 'Lista de dominios', hint: '(uno por línea o separados por coma, máx. 50)',
+        placeholder: 'ejemplo.com\ngoogle.com\ngithub.com',
+        count: ':count dominio(s)', submit: 'Consulta Masiva', loading: 'Consultando…',
+        successCount: ':success / :total exitosos', success: 'Éxito', error: 'Error',
+        expandAll: 'Expandir todo', collapseAll: 'Contraer todo',
+    },
+    errors: {
+        rateLimit: 'Demasiadas solicitudes. Espere un momento.',
+        generic: 'Algo salió mal.',
+    },
+    features: {
+        fast: { title: 'Consulta Rápida', text: 'Respuestas en caché instantáneas para consultas repetidas.' },
+        secure: { title: 'API Segura', text: 'Límite de velocidad contra abusos.' },
+        tld: { title: 'Amplio Soporte TLD', text: 'Whois para .com, .net, .tr y cientos de extensiones.' },
+    },
+    footer: { tagline: 'Disponible como API REST y aplicación web full-stack.' },
+    fields: {
+        domain: 'Dominio', registrar: 'Registrador', owner: 'Propietario', created_at: 'Creado',
+        updated_at: 'Actualizado', expires_at: 'Expira', whois_server: 'Servidor whois',
+        dnssec: 'DNSSEC', states: 'Estado', name_servers: 'Servidores de nombres', raw: 'Whois crudo',
+    },
+    docs: {
+        title: 'Documentación API',
+        subtitle: 'Referencia de la API REST WhoisScope para desarrolladores.',
+        baseUrl: 'URL base', auth: 'Autenticación',
+        authText: 'No se requiere autenticación. Las solicitudes tienen límite por IP.',
+        rateLimits: 'Límites de velocidad', rateSingle: 'Consulta individual', rateBulk: 'Consulta masiva', perMinute: 'solicitudes / minuto',
+        caching: 'Caché',
+        cachingText: 'Los resultados se almacenan en caché durante :ttl segundos. Consultas repetidas pueden devolver datos en caché.',
+        formats: 'Formatos de respuesta',
+        formatSummary: 'Campos esenciales: domain, registrar, created_at, expires_at, states.',
+        formatFull: 'Todos los campos parseados más texto whois crudo.',
+        endpoints: 'Endpoints', singleTitle: 'Consulta individual', singleDesc: 'Whois para un dominio.',
+        bulkTitle: 'Consulta masiva', bulkDesc: 'Varios dominios en una solicitud. Los errores no detienen otros.',
+        queryParams: 'Parámetros de consulta', requestBody: 'Cuerpo de solicitud', response: 'Respuesta', errors: 'Errores',
+        error422: 'Nombre de dominio inválido.', error429: 'Límite de velocidad excedido.',
+        error502: 'Consulta whois fallida.', example: 'Ejemplo',
+    },
+};

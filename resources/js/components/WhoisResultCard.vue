@@ -1,5 +1,6 @@
 <script setup>
 import { computed } from 'vue';
+import { useI18n } from '../i18n';
 
 const props = defineProps({
     data: { type: Object, required: true },
@@ -7,27 +8,34 @@ const props = defineProps({
     compact: { type: Boolean, default: false },
 });
 
+const { t, locale } = useI18n();
+
 const fields = computed(() => {
     const labels = {
-        domain: 'Domain',
-        registrar: 'Kayıt firması',
-        owner: 'Sahip',
-        created_at: 'Oluşturulma',
-        updated_at: 'Güncellenme',
-        expires_at: 'Bitiş tarihi',
-        whois_server: 'Whois sunucusu',
-        dnssec: 'DNSSEC',
+        domain: 'fields.domain',
+        registrar: 'fields.registrar',
+        owner: 'fields.owner',
+        created_at: 'fields.created_at',
+        updated_at: 'fields.updated_at',
+        expires_at: 'fields.expires_at',
+        whois_server: 'fields.whois_server',
+        dnssec: 'fields.dnssec',
     };
 
     const entries = [];
 
-    for (const [key, label] of Object.entries(labels)) {
+    for (const [key, labelKey] of Object.entries(labels)) {
         if (props.data[key] != null && props.data[key] !== '') {
-            entries.push({ key, label, value: props.data[key] });
+            entries.push({ key, label: t(labelKey), value: props.data[key] });
         }
     }
 
     return entries;
+});
+
+const dateLocale = computed(() => {
+    const map = { en: 'en-US', tr: 'tr-TR', es: 'es-ES', zh: 'zh-CN', ar: 'ar-SA', pt: 'pt-BR', fr: 'fr-FR' };
+    return map[locale.value] ?? 'en-US';
 });
 
 function formatDate(value) {
@@ -36,7 +44,7 @@ function formatDate(value) {
     }
 
     try {
-        return new Intl.DateTimeFormat('tr-TR', {
+        return new Intl.DateTimeFormat(dateLocale.value, {
             dateStyle: 'medium',
             timeStyle: 'short',
         }).format(new Date(value));
@@ -55,14 +63,14 @@ function formatDate(value) {
                 class="grid grid-cols-1 sm:grid-cols-3 gap-1 px-4 py-3 even:bg-slate-50/50"
             >
                 <dt class="text-sm font-medium text-slate-500">{{ field.label }}</dt>
-                <dd class="sm:col-span-2 text-sm text-slate-900 break-all">
+                <dd class="sm:col-span-2 text-sm text-slate-900 break-all" dir="ltr">
                     <template v-if="field.key.includes('_at')">{{ formatDate(field.value) }}</template>
                     <template v-else>{{ field.value }}</template>
                 </dd>
             </div>
 
             <div v-if="data.states?.length" class="grid grid-cols-1 sm:grid-cols-3 gap-1 px-4 py-3 even:bg-slate-50/50">
-                <dt class="text-sm font-medium text-slate-500">Durum</dt>
+                <dt class="text-sm font-medium text-slate-500">{{ t('fields.states') }}</dt>
                 <dd class="sm:col-span-2 flex flex-wrap gap-1.5">
                     <span
                         v-for="state in data.states"
@@ -75,7 +83,7 @@ function formatDate(value) {
             </div>
 
             <div v-if="format === 'full' && data.name_servers?.length" class="grid grid-cols-1 sm:grid-cols-3 gap-1 px-4 py-3 even:bg-slate-50/50">
-                <dt class="text-sm font-medium text-slate-500">Name server</dt>
+                <dt class="text-sm font-medium text-slate-500">{{ t('fields.name_servers') }}</dt>
                 <dd class="sm:col-span-2">
                     <ul class="space-y-1 text-sm font-mono text-slate-800">
                         <li v-for="ns in data.name_servers" :key="ns">{{ ns }}</li>
@@ -86,9 +94,9 @@ function formatDate(value) {
 
         <div v-if="format === 'full' && data.raw" class="border-t border-slate-200">
             <div class="px-4 py-2 bg-slate-50 text-xs font-semibold uppercase tracking-wide text-slate-500">
-                Ham Whois
+                {{ t('fields.raw') }}
             </div>
-            <pre class="px-4 py-3 text-xs font-mono text-slate-700 whitespace-pre-wrap overflow-x-auto max-h-80 overflow-y-auto bg-slate-900 text-slate-100">{{ data.raw }}</pre>
+            <pre class="px-4 py-3 text-xs font-mono whitespace-pre-wrap overflow-x-auto max-h-80 overflow-y-auto bg-slate-900 text-slate-100" dir="ltr">{{ data.raw }}</pre>
         </div>
     </div>
 </template>

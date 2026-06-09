@@ -1,0 +1,51 @@
+export default {
+    nav: { home: 'Accueil', apiDocs: 'Documentation API', language: 'Langue' },
+    hero: {
+        title: 'Recherche Whois Rapide et Sécurisée',
+        subtitle: 'Consultez les informations d\'enregistrement de domaines en secondes. Support individuel et en masse.',
+    },
+    tabs: { domain: 'Whois Domaine', bulk: 'Whois en Masse' },
+    domain: {
+        label: 'Nom de domaine', placeholder: 'exemple.com', submit: 'Rechercher', loading: 'Recherche…',
+        format: 'Format', summary: 'Résumé', full: 'Complet',
+    },
+    bulk: {
+        label: 'Liste de domaines', hint: '(un par ligne ou séparés par virgule, max 50)',
+        placeholder: 'exemple.com\ngoogle.com\ngithub.com',
+        count: ':count domaine(s)', submit: 'Recherche en Masse', loading: 'Recherche…',
+        successCount: ':success / :total réussis', success: 'Succès', error: 'Erreur',
+        expandAll: 'Tout développer', collapseAll: 'Tout réduire',
+    },
+    errors: {
+        rateLimit: 'Trop de requêtes. Veuillez patienter.',
+        generic: 'Une erreur est survenue.',
+    },
+    features: {
+        fast: { title: 'Recherche Rapide', text: 'Réponses en cache instantanées pour les requêtes répétées.' },
+        secure: { title: 'API Sécurisée', text: 'Limitation de débit contre les abus.' },
+        tld: { title: 'Large Support TLD', text: 'Whois pour .com, .net, .tr et des centaines d\'extensions.' },
+    },
+    footer: { tagline: 'Disponible en API REST et application web full-stack.' },
+    fields: {
+        domain: 'Domaine', registrar: 'Registrar', owner: 'Propriétaire', created_at: 'Créé',
+        updated_at: 'Mis à jour', expires_at: 'Expire', whois_server: 'Serveur whois',
+        dnssec: 'DNSSEC', states: 'Statut', name_servers: 'Serveurs de noms', raw: 'Whois brut',
+    },
+    docs: {
+        title: 'Documentation API',
+        subtitle: 'Référence de l\'API REST WhoisScope pour les développeurs.',
+        baseUrl: 'URL de base', auth: 'Authentification',
+        authText: 'Aucune authentification requise. Requêtes limitées par IP.',
+        rateLimits: 'Limites de débit', rateSingle: 'Recherche individuelle', rateBulk: 'Recherche en masse', perMinute: 'requêtes / minute',
+        caching: 'Cache',
+        cachingText: 'Résultats en cache pendant :ttl secondes. Requêtes répétées peuvent retourner des données en cache.',
+        formats: 'Formats de réponse',
+        formatSummary: 'Champs essentiels : domain, registrar, created_at, expires_at, states.',
+        formatFull: 'Tous les champs parsés plus texte whois brut.',
+        endpoints: 'Points de terminaison', singleTitle: 'Recherche individuelle', singleDesc: 'Whois pour un domaine.',
+        bulkTitle: 'Recherche en masse', bulkDesc: 'Plusieurs domaines en une requête. Les erreurs n\'arrêtent pas les autres.',
+        queryParams: 'Paramètres de requête', requestBody: 'Corps de requête', response: 'Réponse', errors: 'Erreurs',
+        error422: 'Nom de domaine invalide.', error429: 'Limite de débit dépassée.',
+        error502: 'Recherche whois échouée.', example: 'Exemple',
+    },
+};
