@@ -4,6 +4,7 @@ namespace App\Infrastructure\Whois;
 
 use App\Domain\Whois\Entities\WhoisRecord;
 use App\Domain\Whois\Exceptions\WhoisLookupException;
+use App\Domain\Whois\Exceptions\WhoisParseException;
 use App\Domain\Whois\Repositories\WhoisRepositoryInterface;
 use App\Domain\Whois\ValueObjects\DomainName;
 use Carbon\Carbon;
@@ -36,6 +37,8 @@ class PhpWhoisRepository implements WhoisRepositoryInterface
             return $this->mapRecord($domain, $response->text, $info);
         } catch (ConnectionException|ServerMismatchException|WhoisException $exception) {
             throw new WhoisLookupException($domainValue, $exception);
+        } catch (\Throwable $exception) {
+            throw new WhoisParseException($domainValue, $exception);
         }
     }
 
@@ -85,12 +88,30 @@ class PhpWhoisRepository implements WhoisRepositoryInterface
         );
     }
 
-    private function formatTimestamp(int $timestamp): ?string
+    private function formatTimestamp(mixed $timestamp): ?string
     {
-        if ($timestamp <= 0) {
+        if ($timestamp === null || $timestamp === '' || $timestamp === 0 || $timestamp === '0') {
             return null;
         }
 
-        return Carbon::createFromTimestamp($timestamp)->toIso8601String();
+        if (is_numeric($timestamp)) {
+            $value = (int) $timestamp;
+
+            if ($value <= 0) {
+                return null;
+            }
+
+            return Carbon::createFromTimestamp($value)->toIso8601String();
+        }
+
+        if (is_string($timestamp)) {
+            try {
+                return Carbon::parse($timestamp)->toIso8601String();
+            } catch (\Throwable) {
+                return null;
+            }
+        }
+
+        return null;
     }
 }

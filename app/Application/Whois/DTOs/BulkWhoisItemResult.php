@@ -10,6 +10,7 @@ final readonly class BulkWhoisItemResult
         public string $domain,
         public bool $success,
         public ?WhoisRecord $record,
-        public ?string $message,
+        public ?string $errorCode = null,
+        public ?string $message = null,
     ) {}
 }

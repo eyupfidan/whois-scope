@@ -1,11 +1,11 @@
 <?php
 
-use App\Domain\Whois\Exceptions\InvalidDomainException;
-use App\Domain\Whois\Exceptions\WhoisLookupException;
+use App\Http\Support\ApiErrorResponder;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
 use Illuminate\Http\Request;
+use Symfony\Component\HttpKernel\Exception\TooManyRequestsHttpException;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -22,19 +22,14 @@ return Application::configure(basePath: dirname(__DIR__))
             fn (Request $request) => $request->is('api/*'),
         );
 
-        $exceptions->render(function (InvalidDomainException $exception, Request $request) {
+        $exceptions->render(function (TooManyRequestsHttpException $exception, Request $request) {
             if ($request->is('api/*')) {
                 return response()->json([
-                    'message' => $exception->getMessage(),
-                ], $exception->getCode());
+                    'message' => 'Too many requests. Please wait a moment before trying again.',
+                    'code' => 'rate_limited',
+                ], 429);
             }
         });
 
-        $exceptions->render(function (WhoisLookupException $exception, Request $request) {
-            if ($request->is('api/*')) {
-                return response()->json([
-                    'message' => $exception->getMessage(),
-                ], $exception->getCode());
-            }
-        });
+        $exceptions->render(fn ($exception, Request $request) => ApiErrorResponder::fromException($exception, $request));
     })->create();

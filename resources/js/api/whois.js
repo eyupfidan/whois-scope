@@ -1,5 +1,14 @@
 const API_BASE = '/api/v1/whois';
 
+export class ApiError extends Error {
+    constructor(message, status, code = null) {
+        super(message);
+        this.name = 'ApiError';
+        this.status = status;
+        this.code = code;
+    }
+}
+
 async function request(url, options = {}) {
     const response = await fetch(url, {
         headers: {
@@ -12,11 +21,12 @@ async function request(url, options = {}) {
 
     const data = await response.json().catch(() => ({}));
 
-    if (!response.ok) {
-        const error = new Error(data.message ?? 'Bir hata oluştu.');
-        error.status = response.status;
-        error.data = data;
-        throw error;
+    if (! response.ok) {
+        throw new ApiError(
+            data.message ?? 'Request failed',
+            response.status,
+            data.code ?? null,
+        );
     }
 
     return data;
@@ -24,6 +34,7 @@ async function request(url, options = {}) {
 
 export function lookupDomain(domain, format = 'summary') {
     const params = new URLSearchParams({ format });
+
     return request(`${API_BASE}/${encodeURIComponent(domain)}?${params}`);
 }
 

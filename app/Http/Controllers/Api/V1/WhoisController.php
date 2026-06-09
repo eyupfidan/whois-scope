@@ -60,6 +60,7 @@ class WhoisController extends Controller
             return [
                 'domain' => $item->domain,
                 'status' => 'error',
+                'code' => $item->errorCode,
                 'message' => $item->message,
             ];
         }

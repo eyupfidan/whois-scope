@@ -4,9 +4,13 @@ namespace App\Application\Whois\UseCases;
 
 use App\Application\Whois\DTOs\BulkWhoisItemResult;
 use App\Domain\Whois\Exceptions\InvalidDomainException;
+use App\Domain\Whois\Exceptions\UserFacingException;
 use App\Domain\Whois\Exceptions\WhoisLookupException;
+use App\Domain\Whois\Exceptions\WhoisParseException;
 use App\Domain\Whois\Repositories\WhoisRepositoryInterface;
 use App\Domain\Whois\Services\DomainNameParser;
+use Illuminate\Support\Facades\Log;
+use Throwable;
 
 class BulkLookupWhoisUseCase
 {
@@ -40,15 +44,33 @@ class BulkLookupWhoisUseCase
                 domain: $domain->toString(),
                 success: true,
                 record: $record,
-                message: null,
             );
-        } catch (InvalidDomainException|WhoisLookupException $exception) {
+        } catch (InvalidDomainException|WhoisLookupException|WhoisParseException $exception) {
+            return $this->failureResult($domainInput, $exception);
+        } catch (Throwable $exception) {
+            Log::error($exception->getMessage(), [
+                'domain' => $domainInput,
+                'exception' => $exception,
+            ]);
+
             return new BulkWhoisItemResult(
                 domain: $domainInput,
                 success: false,
                 record: null,
-                message: $exception->getMessage(),
+                errorCode: 'server_error',
+                message: 'Something went wrong on our end. Please try again in a moment.',
             );
         }
+    }
+
+    private function failureResult(string $domainInput, UserFacingException $exception): BulkWhoisItemResult
+    {
+        return new BulkWhoisItemResult(
+            domain: $domainInput,
+            success: false,
+            record: null,
+            errorCode: $exception->errorCode(),
+            message: $exception->userMessage(),
+        );
     }
 }
