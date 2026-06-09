@@ -13,10 +13,12 @@ export default {
         label: 'Lista de domínios', hint: '(um por linha ou separados por vírgula, máx. 50)',
         placeholder: 'exemplo.com\ngoogle.com\ngithub.com',
         count: ':count domínio(s)', submit: 'Consulta em Massa', loading: 'Consultando…',
-        successCount: ':success / :total com sucesso', success: 'Sucesso', error: 'Erro',
+        successCount: ':registered registrados · :available disponíveis · :total total',
+        registered: 'Registrado', available: 'Não registrado', unknown: 'Desconhecido', success: 'Sucesso', error: 'Erro',
         expandAll: 'Expandir tudo', collapseAll: 'Recolher tudo',
         allFailed: 'Nenhum domínio pôde ser consultado.',
         partialFailed: ':count domínio(s) não puderam ser consultados.',
+        downloadCsv: 'Baixar CSV',
     },
     errors: {
         rateLimit: 'Muitas solicitações. Aguarde um momento.',
@@ -36,7 +38,7 @@ export default {
     },
     footer: { tagline: 'Disponível como API REST e aplicação web full-stack.' },
     fields: {
-        domain: 'Domínio', registrar: 'Registrador', owner: 'Proprietário', created_at: 'Criado',
+        domain: 'Domínio', registration_status: 'Registro', registrar: 'Registrador', owner: 'Proprietário', created_at: 'Criado',
         updated_at: 'Atualizado', expires_at: 'Expira', whois_server: 'Servidor whois',
         dnssec: 'DNSSEC', states: 'Status', name_servers: 'Servidores de nomes', raw: 'Whois bruto',
     },

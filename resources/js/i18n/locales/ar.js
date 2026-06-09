@@ -13,10 +13,12 @@ export default {
         label: 'قائمة النطاقات', hint: '(سطر واحد أو مفصولة بفاصلة، حد 50)',
         placeholder: 'example.com\ngoogle.com\ngithub.com',
         count: ':count نطاق', submit: 'بحث جماعي', loading: 'جاري البحث…',
-        successCount: ':success / :total ناجح', success: 'نجاح', error: 'خطأ',
+        successCount: ':registered مسجل · :available غير مسجل · :total الإجمالي',
+        registered: 'مسجل', available: 'غير مسجل', unknown: 'غير معروف', success: 'نجاح', error: 'خطأ',
         expandAll: 'توسيع الكل', collapseAll: 'طي الكل',
         allFailed: 'تعذر البحث عن أي نطاق.',
         partialFailed: 'تعذر البحث عن :count نطاق.',
+        downloadCsv: 'تحميل CSV',
     },
     errors: {
         rateLimit: 'طلبات كثيرة. يرجى الانتظار.',
@@ -36,7 +38,7 @@ export default {
     },
     footer: { tagline: 'متاح كـ REST API وتطبيق ويب full-stack.' },
     fields: {
-        domain: 'النطاق', registrar: 'المسجل', owner: 'المالك', created_at: 'تاريخ الإنشاء',
+        domain: 'النطاق', registration_status: 'حالة التسجيل', registrar: 'المسجل', owner: 'المالك', created_at: 'تاريخ الإنشاء',
         updated_at: 'تاريخ التحديث', expires_at: 'تاريخ الانتهاء', whois_server: 'خادم Whois',
         dnssec: 'DNSSEC', states: 'الحالة', name_servers: 'خوادم الأسماء', raw: 'Whois خام',
     },

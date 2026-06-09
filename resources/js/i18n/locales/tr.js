@@ -13,10 +13,12 @@ export default {
         label: 'Domain listesi', hint: '(satır veya virgülle ayırın, max 50)',
         placeholder: 'ornek.com\ngoogle.com\ngithub.com',
         count: ':count domain', submit: 'Toplu Sorgula', loading: 'Sorgulanıyor…',
-        successCount: ':success / :total başarılı', success: 'Başarılı', error: 'Hata',
+        successCount: ':registered kayıtlı · :available kayıtsız · :total toplam',
+        registered: 'Kayıtlı', available: 'Kayıtsız', unknown: 'Belirsiz', success: 'Başarılı', error: 'Hata',
         expandAll: 'Tümünü aç', collapseAll: 'Tümünü kapat',
         allFailed: 'Hiçbir domain sorgulanamadı.',
         partialFailed: ':count domain sorgulanamadı.',
+        downloadCsv: 'CSV İndir',
     },
     errors: {
         rateLimit: 'Çok fazla istek gönderdiniz. Lütfen biraz bekleyin.',
@@ -36,7 +38,7 @@ export default {
     },
     footer: { tagline: 'REST API ve full-stack web arayüzü olarak kullanılabilir.' },
     fields: {
-        domain: 'Domain', registrar: 'Kayıt firması', owner: 'Sahip', created_at: 'Oluşturulma',
+        domain: 'Domain', registration_status: 'Kayıt durumu', registrar: 'Kayıt firması', owner: 'Sahip', created_at: 'Oluşturulma',
         updated_at: 'Güncellenme', expires_at: 'Bitiş tarihi', whois_server: 'Whois sunucusu',
         dnssec: 'DNSSEC', states: 'Durum', name_servers: 'Name server', raw: 'Ham Whois',
     },

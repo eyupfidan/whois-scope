@@ -5,6 +5,7 @@ import WhoisResultCard from './WhoisResultCard.vue';
 import { useI18n } from '../i18n';
 import { useToast } from '../composables/useToast';
 import { useApiError } from '../composables/useApiError';
+import { downloadBulkResultsCsv, statusLabelForItem } from '../utils/exportBulkCsv';
 
 const { t } = useI18n();
 const toast = useToast();
@@ -21,6 +22,21 @@ const domainCount = computed(() => {
         .split(/[\n,;]+/)
         .map((d) => d.trim())
         .filter(Boolean).length;
+});
+
+const stats = computed(() => {
+    if (! response.value) {
+        return null;
+    }
+
+    const results = response.value.results;
+
+    return {
+        registered: results.filter((r) => r.status === 'registered').length,
+        available: results.filter((r) => r.status === 'available').length,
+        error: results.filter((r) => r.status === 'error').length,
+        total: results.length,
+    };
 });
 
 function parseDomains() {
@@ -60,9 +76,38 @@ function collapseAll() {
     expanded.value = new Set();
 }
 
+function statusLabel(status) {
+    return statusLabelForItem(status, t);
+}
+
+function statusBadgeClass(status) {
+    return {
+        registered: 'bg-emerald-100 text-emerald-700',
+        available: 'bg-sky-100 text-sky-700',
+        unknown: 'bg-amber-100 text-amber-800',
+        error: 'bg-red-200 text-red-800',
+    }[status] ?? 'bg-slate-100 text-slate-700';
+}
+
+function rowClass(status) {
+    if (status === 'error') {
+        return 'bg-red-50/30';
+    }
+
+    if (status === 'available') {
+        return 'bg-sky-50/40';
+    }
+
+    return 'bg-white';
+}
+
 function previewText(item) {
     if (item.status === 'error') {
         return itemMessage(item);
+    }
+
+    if (item.status === 'available') {
+        return t('bulk.available');
     }
 
     const parts = [item.data?.registrar, item.data?.expires_at].filter(Boolean);
@@ -72,6 +117,14 @@ function previewText(item) {
 
 function itemMessage(item) {
     return resolveCode(item.code);
+}
+
+function downloadCsv() {
+    if (! response.value) {
+        return;
+    }
+
+    downloadBulkResultsCsv(response.value.results, t);
 }
 
 watch(response, (value) => {
@@ -159,13 +212,17 @@ async function submit() {
 
         <div v-if="response" class="space-y-3">
             <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
-                <p class="text-sm text-slate-600">
-                    {{ t('bulk.successCount', {
-                        success: response.results.filter((r) => r.status === 'success').length,
-                        total: response.results.length,
-                    }) }}
+                <p v-if="stats" class="text-sm text-slate-600">
+                    {{ t('bulk.successCount', stats) }}
                 </p>
-                <div class="flex gap-2 text-xs">
+                <div class="flex flex-wrap gap-2 text-xs">
+                    <button
+                        type="button"
+                        class="rounded-md border border-slate-200 px-2.5 py-1 text-slate-600 hover:bg-slate-50 transition-colors"
+                        @click="downloadCsv"
+                    >
+                        {{ t('bulk.downloadCsv') }}
+                    </button>
                     <button
                         type="button"
                         class="rounded-md border border-slate-200 px-2.5 py-1 text-slate-600 hover:bg-slate-50 transition-colors"
@@ -187,12 +244,11 @@ async function submit() {
                 <div
                     v-for="item in response.results"
                     :key="item.domain"
-                    :class="item.status === 'error' ? 'bg-red-50/30' : 'bg-white'"
+                    :class="rowClass(item.status)"
                 >
                     <button
                         type="button"
                         class="w-full px-4 py-3 flex items-center gap-3 text-start hover:bg-slate-50/80 transition-colors"
-                        :class="item.status === 'error' ? 'hover:bg-red-50' : ''"
                         :aria-expanded="isOpen(item.domain)"
                         @click="toggle(item.domain)"
                     >
@@ -210,9 +266,9 @@ async function submit() {
 
                         <span
                             class="text-xs uppercase tracking-wide px-2 py-0.5 rounded-full shrink-0"
-                            :class="item.status === 'success' ? 'bg-emerald-100 text-emerald-700' : 'bg-red-200 text-red-800'"
+                            :class="statusBadgeClass(item.status)"
                         >
-                            {{ item.status === 'success' ? t('bulk.success') : t('bulk.error') }}
+                            {{ statusLabel(item.status) }}
                         </span>
 
                         <span
@@ -231,8 +287,11 @@ async function submit() {
                         <p v-if="item.status === 'error'" class="text-sm text-red-700">
                             {{ itemMessage(item) }}
                         </p>
+                        <p v-else-if="item.status === 'available'" class="text-sm text-sky-700 mb-3">
+                            {{ t('bulk.available') }}
+                        </p>
                         <WhoisResultCard
-                            v-else
+                            v-if="item.status !== 'error'"
                             :data="item.data"
                             :format="response.format"
                             compact

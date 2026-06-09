@@ -49,6 +49,7 @@ class WhoisCacheTest extends TestCase
     {
         return new WhoisRecord(
             domain: DomainName::fromValidated('example.com'),
+            registrationStatus: DomainRegistrationStatus::Registered,
             whoisServer: 'whois.iana.org',
             registrar: 'Example Registrar',
             owner: null,

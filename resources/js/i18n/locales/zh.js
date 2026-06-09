@@ -13,10 +13,12 @@ export default {
         label: '域名列表', hint: '（每行一个或逗号分隔，最多 50 个）',
         placeholder: 'example.com\ngoogle.com\ngithub.com',
         count: ':count 个域名', submit: '批量查询', loading: '查询中…',
-        successCount: ':success / :total 成功', success: '成功', error: '错误',
+        successCount: ':registered 已注册 · :available 未注册 · :total 总计',
+        registered: '已注册', available: '未注册', unknown: '未知', success: '成功', error: '错误',
         expandAll: '全部展开', collapseAll: '全部折叠',
         allFailed: '所有域名查询均失败。',
         partialFailed: ':count 个域名查询失败。',
+        downloadCsv: '下载 CSV',
     },
     errors: {
         rateLimit: '请求过多，请稍后再试。',
@@ -36,7 +38,7 @@ export default {
     },
     footer: { tagline: '可作为 REST API 和全栈 Web 应用使用。' },
     fields: {
-        domain: '域名', registrar: '注册商', owner: '所有者', created_at: '创建时间',
+        domain: '域名', registration_status: '注册状态', registrar: '注册商', owner: '所有者', created_at: '创建时间',
         updated_at: '更新时间', expires_at: '过期时间', whois_server: 'Whois 服务器',
         dnssec: 'DNSSEC', states: '状态', name_servers: '域名服务器', raw: '原始 Whois',
     },
