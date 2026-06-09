@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="docs/readme-banner.svg" alt="WhoisScope — Fast WHOIS lookup API and web app" width="100%">
+  <img src="docs/readme-banner.png" alt="WhoisScope — Fast WHOIS lookup API and web app" width="900">
 </p>
 
 <p align="center">
@@ -34,7 +34,7 @@ WhoisScope lets you look up domain registration data through a clean web interfa
 The project follows **Domain-Driven Design (DDD)** so business rules stay independent from Laravel, the WHOIS library, and the Vue frontend.
 
 <p align="center">
-  <img src="public/favicon.svg" alt="WhoisScope icon" width="96" height="96">
+  <img src="docs/icon.png" alt="WhoisScope icon" width="96" height="96">
 </p>
 
 | Mode | Best for |
@@ -416,7 +416,7 @@ You may use, copy, modify, merge, publish, distribute, sublicense, and sell copi
 ---
 
 <p align="center">
-  <img src="public/favicon.svg" alt="" width="32" height="32">
+  <img src="docs/icon.png" alt="" width="32" height="32">
   <br>
   <sub>Built with Laravel & Vue · MIT Licensed</sub>
 </p>

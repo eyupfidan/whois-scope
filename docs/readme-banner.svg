@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" width="1200" height="320" viewBox="0 0 1200 320" fill="none">
   <defs>
     <linearGradient id="bg" x1="0" y1="0" x2="1200" y2="320" gradientUnits="userSpaceOnUse">
@@ -20,7 +21,7 @@
   <path d="M86 120h44" stroke="#ffffff" stroke-width="2.2" stroke-linecap="round" opacity="0.55"/>
   <path d="M146 166l34 34" stroke="#ffffff" stroke-width="4" stroke-linecap="round"/>
   <circle cx="180" cy="200" r="8" stroke="#ffffff" stroke-width="3"/>
-  <text x="200" y="138" fill="#ffffff" font-family="ui-sans-serif, system-ui, -apple-system, Segoe UI, sans-serif" font-size="56" font-weight="700">WhoisScope</text>
-  <text x="200" y="186" fill="#dbeafe" font-family="ui-sans-serif, system-ui, -apple-system, Segoe UI, sans-serif" font-size="28" font-weight="500">Fast WHOIS lookup API &amp; web app</text>
-  <text x="200" y="232" fill="#bfdbfe" font-family="ui-sans-serif, system-ui, -apple-system, Segoe UI, sans-serif" font-size="20">Single · Bulk · Cached · Multilingual · MIT Licensed</text>
+  <text x="200" y="138" fill="#ffffff" font-family="Arial, Helvetica, sans-serif" font-size="56" font-weight="700">WhoisScope</text>
+  <text x="200" y="186" fill="#dbeafe" font-family="Arial, Helvetica, sans-serif" font-size="28" font-weight="500">Fast WHOIS lookup API and web app</text>
+  <text x="200" y="232" fill="#bfdbfe" font-family="Arial, Helvetica, sans-serif" font-size="20">Single | Bulk | Cached | Multilingual | MIT Licensed</text>
 </svg>
