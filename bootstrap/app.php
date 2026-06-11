@@ -36,7 +36,7 @@ return Application::configure(basePath: dirname(__DIR__))
             return ApiErrorResponder::fromException($exception, $request);
         });
 
-        $exceptions->render(function (\Throwable $exception, Request $request) {
+        $exceptions->render(function (Throwable $exception, Request $request) {
             return ApiErrorResponder::fromException($exception, $request);
         });
     })->create();

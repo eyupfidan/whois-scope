@@ -4,6 +4,7 @@
 
 <p align="center">
   <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-blue.svg" alt="MIT License"></a>
+  <a href="https://github.com/eyupfidan/whois-api/actions/workflows/ci.yml"><img src="https://github.com/eyupfidan/whois-api/actions/workflows/ci.yml/badge.svg" alt="CI"></a>
   <img src="https://img.shields.io/badge/PHP-8.3%2B-777BB4?logo=php&logoColor=white" alt="PHP 8.3+">
   <img src="https://img.shields.io/badge/Laravel-13-FF2D20?logo=laravel&logoColor=white" alt="Laravel 13">
   <img src="https://img.shields.io/badge/Vue.js-3-4FC08D?logo=vuedotjs&logoColor=white" alt="Vue 3">
@@ -374,6 +375,26 @@ php artisan test
 ```
 
 The test suite covers API responses, caching, rate limiting, and registration status detection.
+
+GitHub Actions runs the same checks on every push and pull request to `main`.
+
+---
+
+## 🤖 GitHub Automation
+
+| Integration | Purpose |
+|-------------|---------|
+| **Dependabot** | Weekly Composer, npm, and GitHub Actions updates |
+| **CI** | PHP tests, Laravel Pint, frontend build |
+| **CodeQL** | Security analysis for PHP and JavaScript |
+| **Dependency Review** | Blocks PRs with critical dependency vulnerabilities |
+
+Config lives in [`.github/`](.github/).
+
+After pushing, enable **Settings → Security → Code security**:
+- Dependabot alerts
+- Dependabot security updates
+- Code scanning (CodeQL)
 
 ---
 
