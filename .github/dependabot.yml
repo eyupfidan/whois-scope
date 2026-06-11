@@ -52,17 +52,3 @@ updates:
         update-types:
           - minor
           - patch
-
-  - package-ecosystem: github-actions
-    directory: /
-    schedule:
-      interval: weekly
-      day: monday
-      time: "07:00"
-      timezone: Europe/Istanbul
-    labels:
-      - dependencies
-      - github-actions
-    commit-message:
-      prefix: deps
-      include: scope
