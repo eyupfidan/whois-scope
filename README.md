@@ -131,6 +131,37 @@ The UI includes two tabs:
 1. **Domain Whois** — single domain lookup with summary/full format
 2. **Bulk Whois** — paste up to 50 domains (one per line or comma-separated), view accordion results, export CSV
 
+### Screenshots
+
+<p align="center">
+  <img src="docs/screenshots/home.png" alt="WhoisScope home page — domain lookup" width="900">
+</p>
+
+<p align="center">
+  <em>Home page with single-domain lookup</em>
+</p>
+
+<table>
+  <tr>
+    <td width="50%">
+      <img src="docs/screenshots/lookup-result.png" alt="WHOIS lookup result for google.com" width="100%">
+      <br><sub>Single lookup with summary results</sub>
+    </td>
+    <td width="50%">
+      <img src="docs/screenshots/bulk-lookup.png" alt="Bulk WHOIS lookup with accordion results" width="100%">
+      <br><sub>Bulk lookup with CSV export</sub>
+    </td>
+  </tr>
+</table>
+
+<p align="center">
+  <img src="docs/screenshots/api-docs.png" alt="Built-in API documentation page" width="900">
+</p>
+
+<p align="center">
+  <em>Interactive API reference at <code>/docs</code></em>
+</p>
+
 Supported interface languages:
 
 | Code | Language |
