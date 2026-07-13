@@ -398,10 +398,6 @@ Contributions are welcome. Please open an issue or pull request. By contributing
 
 ## 📄 License
 
-<p align="center">
-  <img src="https://img.shields.io/badge/License-MIT-blue.svg" alt="MIT License">
-</p>
-
 WhoisScope is open source software licensed under the **[MIT License](LICENSE)**.
 
 You may use, copy, modify, merge, publish, distribute, sublicense, and sell copies of the software — for personal or commercial projects — as long as the license notice is included.
