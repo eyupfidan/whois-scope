@@ -405,11 +405,3 @@ Contributions are welcome. Please open an issue or pull request. By contributing
 WhoisScope is open source software licensed under the **[MIT License](LICENSE)**.
 
 You may use, copy, modify, merge, publish, distribute, sublicense, and sell copies of the software — for personal or commercial projects — as long as the license notice is included.
-
----
-
-<p align="center">
-  <img src="docs/icon.png" alt="" width="32" height="32">
-  <br>
-  <sub>Built with Laravel & Vue · MIT Licensed</sub>
-</p>
