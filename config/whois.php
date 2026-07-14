@@ -56,7 +56,29 @@ return [
     |
     */
 
-    'custom_servers' => [],
+    'custom_servers' => [
+        ['zone' => '.com.tr', 'host' => 'whois.trabis.gov.tr'],
+        ['zone' => '.net.tr', 'host' => 'whois.trabis.gov.tr'],
+        ['zone' => '.org.tr', 'host' => 'whois.trabis.gov.tr'],
+        ['zone' => '.info.tr', 'host' => 'whois.trabis.gov.tr'],
+        ['zone' => '.biz.tr', 'host' => 'whois.trabis.gov.tr'],
+        ['zone' => '.web.tr', 'host' => 'whois.trabis.gov.tr'],
+        ['zone' => '.gen.tr', 'host' => 'whois.trabis.gov.tr'],
+        ['zone' => '.av.tr', 'host' => 'whois.trabis.gov.tr'],
+        ['zone' => '.dr.tr', 'host' => 'whois.trabis.gov.tr'],
+        ['zone' => '.name.tr', 'host' => 'whois.trabis.gov.tr'],
+        ['zone' => '.tv.tr', 'host' => 'whois.trabis.gov.tr'],
+        ['zone' => '.bbs.tr', 'host' => 'whois.trabis.gov.tr'],
+        ['zone' => '.tel.tr', 'host' => 'whois.trabis.gov.tr'],
+        ['zone' => '.k12.tr', 'host' => 'whois.trabis.gov.tr'],
+        ['zone' => '.edu.tr', 'host' => 'whois.trabis.gov.tr'],
+        ['zone' => '.gov.tr', 'host' => 'whois.trabis.gov.tr'],
+        ['zone' => '.bel.tr', 'host' => 'whois.trabis.gov.tr'],
+        ['zone' => '.pol.tr', 'host' => 'whois.trabis.gov.tr'],
+        ['zone' => '.tsk.tr', 'host' => 'whois.trabis.gov.tr'],
+        ['zone' => '.mil.tr', 'host' => 'whois.trabis.gov.tr'],
+        ['zone' => '.nc.tr', 'host' => 'whois.trabis.gov.tr'],
+    ],
 
     /*
     |--------------------------------------------------------------------------

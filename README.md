@@ -274,7 +274,7 @@ CACHE_STORE=database
 
 > **Tip:** For production, set `CACHE_STORE=redis` and keep `WHOIS_CACHE_ENABLED=true`. Cached lookups typically respond in ~1 ms.
 
-Custom WHOIS servers for specific TLDs can be added in `config/whois.php` under `custom_servers`.
+Custom WHOIS servers for specific TLDs can be added in `config/whois.php` under `custom_servers`. Common Turkish local second-level zones such as `.com.tr`, `.net.tr`, `.org.tr`, `.web.tr`, `.gen.tr`, `.gov.tr`, and `.edu.tr` are configured by default to use the TRABIS WHOIS server.
 
 ---
 
