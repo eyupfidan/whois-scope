@@ -401,3 +401,60 @@ Contributions are welcome. Please open an issue or pull request. By contributing
 WhoisScope is open source software licensed under the **[MIT License](LICENSE)**.
 
 You may use, copy, modify, merge, publish, distribute, sublicense, and sell copies of the software — for personal or commercial projects — as long as the license notice is included.
+
+---
+
+## 🐳 Docker / Dokploy Deployment
+
+This repository includes a production-oriented Docker setup that is compatible with Dokploy's Dockerfile and Docker Compose deployments.
+
+### Build and run locally
+
+```bash
+docker compose up -d --build
+```
+
+The application will be available at **http://localhost:8000**.
+
+### Dokploy setup
+
+1. Create a new Dokploy application from this repository.
+2. Select **Dockerfile** deployment, or use the included `docker-compose.yml` if your Dokploy project is Compose-based.
+3. Set the public port to **80** inside the container.
+4. Configure environment variables as needed. At minimum, set:
+
+```env
+APP_NAME=WhoisScope
+APP_ENV=production
+APP_DEBUG=false
+APP_URL=https://your-domain.example
+LOG_CHANNEL=stderr
+DB_CONNECTION=sqlite
+DB_DATABASE=/var/www/html/database/database.sqlite
+SESSION_DRIVER=database
+CACHE_STORE=database
+QUEUE_CONNECTION=database
+RUN_MIGRATIONS=true
+```
+
+`APP_KEY` is optional for first boot. If it is omitted, the container entrypoint generates one automatically. For stable encrypted sessions in production, set a persistent `APP_KEY` value in Dokploy after generating it once.
+
+### Persistent volumes
+
+When using SQLite, persist these paths in Dokploy so database and generated storage files survive redeployments:
+
+| Container path | Purpose |
+|----------------|---------|
+| `/var/www/html/database` | SQLite database file |
+| `/var/www/html/storage` | Laravel cache/session/log/storage data |
+
+### Runtime behavior
+
+On startup, the container:
+
+- creates required Laravel writable directories,
+- creates the SQLite database file when `DB_CONNECTION=sqlite`,
+- generates `APP_KEY` when missing,
+- caches Laravel config, routes, and views,
+- runs migrations when `RUN_MIGRATIONS=true`,
+- starts Nginx and PHP-FPM through Supervisor.
