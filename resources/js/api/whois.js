@@ -9,6 +9,25 @@ export class ApiError extends Error {
     }
 }
 
+export function normalizeDomainInput(input) {
+    const value = String(input).trim();
+
+    if (! value) {
+        return '';
+    }
+
+    try {
+        const url = new URL(
+            /^[a-z][a-z\d+.-]*:\/\//i.test(value) ? value : `http://${value}`,
+        );
+        const hostname = url.hostname.toLowerCase().replace(/\.$/, '');
+
+        return hostname.startsWith('www.') ? hostname.slice(4) : hostname;
+    } catch {
+        return value;
+    }
+}
+
 async function request(url, options = {}) {
     const response = await fetch(url, {
         headers: {
@@ -33,6 +52,7 @@ async function request(url, options = {}) {
 }
 
 export function lookupDomain(domain, format = 'summary') {
+    domain = normalizeDomainInput(domain);
     const params = new URLSearchParams({ format });
 
     return request(`${API_BASE}/${encodeURIComponent(domain)}?${params}`);

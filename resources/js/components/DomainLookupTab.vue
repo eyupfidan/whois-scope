@@ -1,6 +1,6 @@
 <script setup>
 import { ref } from 'vue';
-import { lookupDomain } from '../api/whois';
+import { lookupDomain, normalizeDomainInput } from '../api/whois';
 import WhoisResultCard from './WhoisResultCard.vue';
 import { useI18n } from '../i18n';
 import { useToast } from '../composables/useToast';
@@ -16,16 +16,17 @@ const loading = ref(false);
 const result = ref(null);
 
 async function submit() {
-    const value = domain.value.trim();
+    const value = normalizeDomainInput(domain.value);
     if (! value) {
         return;
     }
 
+    domain.value = value;
     loading.value = true;
     result.value = null;
 
     try {
-        const response = await lookupDomain(value, format.value);
+        const response = await lookupDomain(value, 'full');
         result.value = response.data;
     } catch (err) {
         toast.error(resolve(err));
