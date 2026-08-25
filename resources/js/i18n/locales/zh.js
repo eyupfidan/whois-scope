@@ -9,6 +9,12 @@ export default {
         label: '域名', placeholder: 'example.com', submit: '查询', loading: '查询中…',
         format: '格式', summary: '摘要', full: '完整',
     },
+    history: {
+        title: '最近查询',
+        description: '仅存储在此浏览器中。',
+        clear: '清除',
+        lookupAgain: '再次查询',
+    },
     bulk: {
         label: '域名列表', hint: '（每行一个或逗号分隔，最多 50 个）',
         placeholder: 'example.com\ngoogle.com\ngithub.com',

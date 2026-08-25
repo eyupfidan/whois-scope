@@ -9,6 +9,12 @@ export default {
         label: 'Domain adı', placeholder: 'ornek.com', submit: 'Sorgula', loading: 'Sorgulanıyor…',
         format: 'Format', summary: 'Özet', full: 'Tam',
     },
+    history: {
+        title: 'Son sorgular',
+        description: 'Yalnızca bu tarayıcıda saklanır.',
+        clear: 'Temizle',
+        lookupAgain: 'Tekrar sorgula',
+    },
     bulk: {
         label: 'Domain listesi', hint: '(satır veya virgülle ayırın, max 50)',
         placeholder: 'ornek.com\ngoogle.com\ngithub.com',

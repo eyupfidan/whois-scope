@@ -9,6 +9,12 @@ export default {
         label: 'اسم النطاق', placeholder: 'example.com', submit: 'بحث', loading: 'جاري البحث…',
         format: 'التنسيق', summary: 'ملخص', full: 'كامل',
     },
+    history: {
+        title: 'عمليات البحث الأخيرة',
+        description: 'محفوظة في هذا المتصفح فقط.',
+        clear: 'مسح',
+        lookupAgain: 'البحث مرة أخرى',
+    },
     bulk: {
         label: 'قائمة النطاقات', hint: '(سطر واحد أو مفصولة بفاصلة، حد 50)',
         placeholder: 'example.com\ngoogle.com\ngithub.com',

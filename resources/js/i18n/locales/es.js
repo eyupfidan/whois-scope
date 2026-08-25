@@ -9,6 +9,12 @@ export default {
         label: 'Nombre de dominio', placeholder: 'ejemplo.com', submit: 'Consultar', loading: 'Consultando…',
         format: 'Formato', summary: 'Resumen', full: 'Completo',
     },
+    history: {
+        title: 'Consultas recientes',
+        description: 'Guardadas solo en este navegador.',
+        clear: 'Borrar',
+        lookupAgain: 'Consultar de nuevo',
+    },
     bulk: {
         label: 'Lista de dominios', hint: '(uno por línea o separados por coma, máx. 50)',
         placeholder: 'ejemplo.com\ngoogle.com\ngithub.com',

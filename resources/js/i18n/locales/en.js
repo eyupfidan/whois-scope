@@ -21,6 +21,12 @@ export default {
         summary: 'Summary',
         full: 'Full',
     },
+    history: {
+        title: 'Recent lookups',
+        description: 'Stored only in this browser.',
+        clear: 'Clear',
+        lookupAgain: 'Look up again',
+    },
     bulk: {
         label: 'Domain list',
         hint: '(one per line or comma-separated, max 50)',
