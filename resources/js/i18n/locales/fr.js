@@ -9,6 +9,12 @@ export default {
         label: 'Nom de domaine', placeholder: 'exemple.com', submit: 'Rechercher', loading: 'Recherche…',
         format: 'Format', summary: 'Résumé', full: 'Complet',
     },
+    history: {
+        title: 'Recherches récentes',
+        description: 'Stockées uniquement dans ce navigateur.',
+        clear: 'Effacer',
+        lookupAgain: 'Rechercher à nouveau',
+    },
     bulk: {
         label: 'Liste de domaines', hint: '(un par ligne ou séparés par virgule, max 50)',
         placeholder: 'exemple.com\ngoogle.com\ngithub.com',

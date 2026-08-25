@@ -19,8 +19,8 @@ export const locales = [
     { code: 'tr', label: 'Türkçe' },
 ];
 
-const stored = typeof localStorage !== 'undefined' ? localStorage.getItem('locale') : null;
-const locale = ref(stored && messages[stored] ? stored : 'en');
+const pathLocale = typeof window !== 'undefined' ? window.location.pathname.split('/')[1] : null;
+const locale = ref(pathLocale && messages[pathLocale] ? pathLocale : 'en');
 
 function resolve(obj, path) {
     return path.split('.').reduce((acc, key) => acc?.[key], obj);

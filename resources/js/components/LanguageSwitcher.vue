@@ -1,7 +1,15 @@
 <script setup>
 import { useI18n } from '../i18n';
+import { useRoute, useRouter } from 'vue-router';
 
 const { t, locale, locales, setLocale } = useI18n();
+const route = useRoute();
+const router = useRouter();
+
+function changeLocale(code) {
+    setLocale(code);
+    router.push({ name: route.name === 'docs' ? 'docs' : 'home', params: { locale: code } });
+}
 </script>
 
 <template>
@@ -10,7 +18,7 @@ const { t, locale, locales, setLocale } = useI18n();
             :value="locale"
             class="appearance-none rounded-lg border border-slate-200 bg-slate-50 pl-3 pr-8 py-1.5 text-xs font-medium text-slate-700 cursor-pointer hover:border-sky-300 focus:border-sky-500 focus:ring-2 focus:ring-sky-500/20 outline-none transition"
             :aria-label="t('nav.language')"
-            @change="setLocale($event.target.value)"
+            @change="changeLocale($event.target.value)"
         >
             <option v-for="item in locales" :key="item.code" :value="item.code">
                 {{ item.label }}
