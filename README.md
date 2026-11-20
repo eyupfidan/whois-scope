@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="docs/readme-banner.png" alt="WhoisScope" width="900">
+  <img src="docs/readme-banner.png" alt="WhoisScope" width="100%">
 </p>
 
 <p align="center">

@@ -1,27 +1,86 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="320" viewBox="0 0 1200 320" fill="none">
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="400" viewBox="0 0 1280 400" fill="none">
   <defs>
-    <linearGradient id="bg" x1="0" y1="0" x2="1200" y2="320" gradientUnits="userSpaceOnUse">
+    <linearGradient id="bg" x1="0" y1="0" x2="1280" y2="400" gradientUnits="userSpaceOnUse">
       <stop stop-color="#0284c7"/>
-      <stop offset="0.55" stop-color="#2563eb"/>
+      <stop offset="0.5" stop-color="#2563eb"/>
       <stop offset="1" stop-color="#4338ca"/>
     </linearGradient>
-    <linearGradient id="icon-bg" x1="0" y1="0" x2="96" y2="96" gradientUnits="userSpaceOnUse">
-      <stop stop-color="#ffffff" stop-opacity="0.25"/>
+    <radialGradient id="glow" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(1000 200) scale(420 300)">
+      <stop stop-color="#ffffff" stop-opacity="0.18"/>
+      <stop offset="1" stop-color="#ffffff" stop-opacity="0"/>
+    </radialGradient>
+    <pattern id="dots" width="24" height="24" patternUnits="userSpaceOnUse">
+      <circle cx="2" cy="2" r="1.4" fill="#ffffff" fill-opacity="0.12"/>
+    </pattern>
+    <linearGradient id="fade" x1="560" y1="0" x2="1280" y2="0" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#ffffff" stop-opacity="0"/>
+      <stop offset="1" stop-color="#ffffff"/>
+    </linearGradient>
+    <mask id="dots-mask">
+      <rect width="1280" height="400" fill="url(#fade)"/>
+    </mask>
+    <linearGradient id="tile" x1="80" y1="96" x2="168" y2="184" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#ffffff" stop-opacity="0.28"/>
       <stop offset="1" stop-color="#ffffff" stop-opacity="0.08"/>
     </linearGradient>
+    <filter id="shadow" x="680" y="40" width="580" height="360" filterUnits="userSpaceOnUse">
+      <feDropShadow dx="0" dy="18" stdDeviation="20" flood-color="#0b1033" flood-opacity="0.45"/>
+    </filter>
+    <clipPath id="frame">
+      <rect width="1280" height="400" rx="28"/>
+    </clipPath>
   </defs>
-  <rect width="1200" height="320" rx="24" fill="url(#bg)"/>
-  <circle cx="980" cy="80" r="120" fill="#ffffff" fill-opacity="0.06"/>
-  <circle cx="1100" cy="260" r="90" fill="#ffffff" fill-opacity="0.05"/>
-  <circle cx="150" cy="260" r="70" fill="#ffffff" fill-opacity="0.05"/>
-  <rect x="72" y="88" width="96" height="96" rx="22" fill="url(#icon-bg)" stroke="#ffffff" stroke-opacity="0.35"/>
-  <circle cx="108" cy="120" r="22" stroke="#ffffff" stroke-width="3" opacity="0.95"/>
-  <ellipse cx="108" cy="120" rx="8" ry="22" stroke="#ffffff" stroke-width="2.2" opacity="0.75"/>
-  <path d="M86 120h44" stroke="#ffffff" stroke-width="2.2" stroke-linecap="round" opacity="0.55"/>
-  <path d="M146 166l34 34" stroke="#ffffff" stroke-width="4" stroke-linecap="round"/>
-  <circle cx="180" cy="200" r="8" stroke="#ffffff" stroke-width="3"/>
-  <text x="200" y="138" fill="#ffffff" font-family="Arial, Helvetica, sans-serif" font-size="56" font-weight="700">WhoisScope</text>
-  <text x="200" y="186" fill="#dbeafe" font-family="Arial, Helvetica, sans-serif" font-size="28" font-weight="500">Fast WHOIS lookup API and web app</text>
-  <text x="200" y="232" fill="#bfdbfe" font-family="Arial, Helvetica, sans-serif" font-size="20">Single | Bulk | Cached | Multilingual | MIT Licensed</text>
+
+  <g clip-path="url(#frame)">
+    <rect width="1280" height="400" fill="url(#bg)"/>
+    <rect width="1280" height="400" fill="url(#dots)" mask="url(#dots-mask)"/>
+    <rect width="1280" height="400" fill="url(#glow)"/>
+    <circle cx="40" cy="420" r="160" fill="#ffffff" fill-opacity="0.05"/>
+  </g>
+
+  <!-- Logo -->
+  <rect x="80" y="96" width="88" height="88" rx="22" fill="url(#tile)" stroke="#ffffff" stroke-opacity="0.35"/>
+  <circle cx="117" cy="133" r="22" stroke="#ffffff" stroke-width="4.5"/>
+  <ellipse cx="117" cy="133" rx="9" ry="22" stroke="#ffffff" stroke-width="3" stroke-opacity="0.8"/>
+  <path d="M95 133h44" stroke="#ffffff" stroke-width="3" stroke-opacity="0.8"/>
+  <path d="M133 149l14 14" stroke="#ffffff" stroke-width="5" stroke-linecap="round"/>
+  <circle cx="152" cy="168" r="6.5" stroke="#ffffff" stroke-width="3.5"/>
+
+  <!-- Title -->
+  <text x="192" y="160" fill="#ffffff" font-family="'Segoe UI', Inter, Helvetica, Arial, sans-serif" font-size="64" font-weight="700" letter-spacing="-1">WhoisScope</text>
+  <text x="80" y="236" fill="#e0f2fe" font-family="'Segoe UI', Inter, Helvetica, Arial, sans-serif" font-size="26">Self-hosted WHOIS lookup API and web interface</text>
+
+  <!-- Feature chips -->
+  <g font-family="'Segoe UI', Inter, Helvetica, Arial, sans-serif" font-size="17" font-weight="600" fill="#ffffff">
+    <rect x="80" y="270" width="134" height="36" rx="18" fill="#ffffff" fill-opacity="0.14" stroke="#ffffff" stroke-opacity="0.3"/>
+    <text x="147" y="294" text-anchor="middle">Bulk lookup</text>
+    <rect x="226" y="270" width="104" height="36" rx="18" fill="#ffffff" fill-opacity="0.14" stroke="#ffffff" stroke-opacity="0.3"/>
+    <text x="278" y="294" text-anchor="middle">JSON API</text>
+    <rect x="342" y="270" width="98" height="36" rx="18" fill="#ffffff" fill-opacity="0.14" stroke="#ffffff" stroke-opacity="0.3"/>
+    <text x="391" y="294" text-anchor="middle">Caching</text>
+    <rect x="452" y="270" width="126" height="36" rx="18" fill="#ffffff" fill-opacity="0.14" stroke="#ffffff" stroke-opacity="0.3"/>
+    <text x="515" y="294" text-anchor="middle">7 languages</text>
+  </g>
+
+  <!-- Response card -->
+  <g filter="url(#shadow)">
+    <rect x="720" y="62" width="480" height="256" rx="16" fill="#0b1220" fill-opacity="0.82"/>
+  </g>
+  <rect x="720.5" y="62.5" width="479" height="255" rx="15.5" stroke="#ffffff" stroke-opacity="0.16"/>
+  <path d="M720 108h480" stroke="#ffffff" stroke-opacity="0.1"/>
+  <circle cx="746" cy="85" r="6" fill="#f87171"/>
+  <circle cx="766" cy="85" r="6" fill="#fbbf24"/>
+  <circle cx="786" cy="85" r="6" fill="#34d399"/>
+  <g font-family="Consolas, 'Cascadia Mono', Menlo, monospace" font-size="15">
+    <text x="812" y="90"><tspan fill="#34d399" font-weight="700">GET</tspan><tspan fill="#cbd5e1"> /api/v1/whois/google.com</tspan></text>
+  </g>
+  <g font-family="Consolas, 'Cascadia Mono', Menlo, monospace" font-size="16" fill="#cbd5e1">
+    <text x="746" y="140">{</text>
+    <text x="746" y="166" xml:space="preserve">  <tspan fill="#93c5fd">"domain"</tspan>: <tspan fill="#86efac">"google.com"</tspan>,</text>
+    <text x="746" y="192" xml:space="preserve">  <tspan fill="#93c5fd">"registration_status"</tspan>: <tspan fill="#86efac">"registered"</tspan>,</text>
+    <text x="746" y="218" xml:space="preserve">  <tspan fill="#93c5fd">"registrar"</tspan>: <tspan fill="#86efac">"MarkMonitor Inc."</tspan>,</text>
+    <text x="746" y="244" xml:space="preserve">  <tspan fill="#93c5fd">"expires_at"</tspan>: <tspan fill="#86efac">"2028-09-14"</tspan>,</text>
+    <text x="746" y="270" xml:space="preserve">  <tspan fill="#93c5fd">"name_servers"</tspan>: [<tspan fill="#86efac">"ns1.google.com"</tspan>, …]</text>
+    <text x="746" y="296">}</text>
+  </g>
 </svg>
