@@ -1,175 +1,75 @@
 <p align="center">
-  <img src="docs/readme-banner.png" alt="WhoisScope — Fast WHOIS lookup API and web app" width="900">
+  <img src="docs/readme-banner.png" alt="WhoisScope" width="900">
 </p>
 
 <p align="center">
-  <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-blue.svg" alt="MIT License"></a>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="License: MIT"></a>
   <img src="https://img.shields.io/badge/PHP-8.6-777BB4?logo=php&logoColor=white" alt="PHP 8.6">
   <img src="https://img.shields.io/badge/Laravel-13-FF2D20?logo=laravel&logoColor=white" alt="Laravel 13">
-  <img src="https://img.shields.io/badge/Vue.js-3-4FC08D?logo=vuedotjs&logoColor=white" alt="Vue 3">
-  <img src="https://img.shields.io/badge/Tailwind-4-06B6D4?logo=tailwindcss&logoColor=white" alt="Tailwind CSS 4">
-  <img src="https://img.shields.io/badge/Architecture-DDD-4338ca" alt="Domain-Driven Design">
+  <img src="https://img.shields.io/badge/Vue-3-4FC08D?logo=vuedotjs&logoColor=white" alt="Vue 3">
 </p>
 
 <p align="center">
-  <strong>WhoisScope</strong> is an open-source WHOIS lookup platform built with Laravel and Vue.js.<br>
-  Use it as a <strong>REST API</strong>, a <strong>full-stack web app</strong>, or both — with caching, rate limiting, bulk queries, and a multilingual UI.
-</p>
-
-<p align="center">
-  <a href="#-quick-start">Quick Start</a> ·
-  <a href="#-features">Features</a> ·
-  <a href="#-api-reference">API</a> ·
-  <a href="#-configuration">Configuration</a> ·
-  <a href="#-architecture">Architecture</a> ·
-  <a href="LICENSE">License</a>
+  Self-hosted WHOIS lookup service with a JSON API and a web interface.
 </p>
 
 ---
 
-## Overview
-
-WhoisScope lets you look up domain registration data through a clean web interface or a versioned JSON API. It parses raw WHOIS responses, detects whether a domain is **registered**, **available**, or **unknown**, and returns structured fields such as registrar, creation date, expiry date, and status codes.
-
-The project follows **Domain-Driven Design (DDD)** so business rules stay independent from Laravel, the WHOIS library, and the Vue frontend.
+WhoisScope queries WHOIS servers directly, parses the response, and reports whether a domain is registered, available, or unknown, along with its registrar, dates, status codes, and name servers. Results are cached and requests are rate-limited per IP.
 
 <p align="center">
-  <img src="docs/icon.png" alt="WhoisScope icon" width="96" height="96">
+  <img src="docs/screenshots/home.png" alt="WhoisScope web interface" width="800">
 </p>
 
-| Mode | Best for |
-|------|----------|
-| **Web UI** | Manual lookups, bulk CSV export, exploring results |
-| **REST API** | Integrations, scripts, backend services |
-| **API + UI** | Self-hosted product with built-in documentation at `/docs` |
+## Features
 
----
+- Single and bulk lookups (up to 50 domains per request, processed concurrently)
+- `summary` and `full` response formats, including raw WHOIS output
+- Registration status detection: `registered`, `available`, `unknown`
+- Response caching and per-IP rate limiting
+- Web interface in 7 languages with CSV export for bulk results
+- Built-in API reference at `/docs`
 
-## ✨ Features
+## Quick start
 
-| Feature | Description |
-|---------|-------------|
-| 🔍 **Single lookup** | Query one domain with `summary` or `full` response format |
-| 📦 **Bulk lookup** | Up to 50 domains per request, parallel processing, per-domain status |
-| ⚡ **Smart cache** | Results cached by default (1 hour); repeat queries are near-instant |
-| 🛡️ **Rate limiting** | Per-IP limits on single and bulk endpoints |
-| 🌍 **Multilingual UI** | 7 languages in the web interface |
-| 📄 **CSV export** | Download bulk results from the web UI |
-| 🎯 **Registration status** | `registered`, `available`, `unknown`, or `error` per domain |
-| 📚 **Built-in API docs** | Interactive reference at `/docs` |
-| 🔓 **MIT licensed** | Free for personal and commercial use |
-
----
-
-## 🚀 Quick Start
-
-### Requirements
-
-| Tool | Version |
-|------|---------|
-| PHP | 8.3 or higher |
-| Composer | 2.x |
-| Node.js | 20+ (for frontend build) |
-| SQLite | Included (default) or MySQL/PostgreSQL |
-
-### Installation
+### Docker
 
 ```bash
-git clone https://github.com/your-org/whois-api.git
-cd whois-api
+docker compose up -d --build
+```
 
+The app is served at http://localhost:8000.
+
+### Local development
+
+Requirements: PHP 8.4+, Composer 2, Node.js 22+.
+
+```bash
+git clone https://github.com/eyupfidan/whois-scope.git
+cd whois-scope
 composer install
 cp .env.example .env
 php artisan key:generate
 php artisan migrate
-
 npm install
-npm run build
-```
-
-### Run locally
-
-**Option A — Full stack (recommended for first run)**
-
-```bash
-# Terminal 1
-php artisan serve
-
-# Terminal 2
-npm run dev
-```
-
-Open **[http://localhost:8000](http://localhost:8000)**
-
-| Page | URL |
-|------|-----|
-| Home (lookup UI) | `/` |
-| API documentation | `/docs` |
-
-**Option B — API only**
-
-```bash
-php artisan serve
-```
-
-The API works without building the frontend. Endpoints are available under `/api/v1/whois/*`.
-
-**Option C — One command (dev)**
-
-```bash
 composer dev
 ```
 
-Runs the PHP server, queue worker, logs, and Vite dev server together.
+`composer dev` starts the PHP server, queue listener, log viewer, and Vite together.
 
----
+## API
 
-Supported interface languages:
+Base URL: `/api/v1/whois`
 
-| Code | Language |
-|------|----------|
-| `en` | English *(default)* |
-| `tr` | Türkçe |
-| `es` | Español |
-| `fr` | Français |
-| `pt` | Português |
-| `zh` | 中文 |
-| `ar` | العربية |
+| Method | Path | Rate limit | Description |
+|--------|------|------------|-------------|
+| `GET` | `/{domain}` | 60/min | Look up one domain |
+| `POST` | `/bulk` | 10/min | Look up up to 50 domains |
 
----
-
-## 📡 API Reference
-
-Base URL: `http://localhost:8000/api/v1/whois`
-
-### Endpoints
-
-| Method | Endpoint | Rate limit | Description |
-|--------|----------|------------|-------------|
-| `GET` | `/whois/{domain}` | 60/min per IP | Single domain lookup |
-| `POST` | `/whois/bulk` | 10/min per IP | Bulk domain lookup |
-
-### Query / body parameters
-
-| Parameter | Location | Values | Default |
-|-----------|----------|--------|---------|
-| `format` | query or JSON body | `summary`, `full` | `summary` |
-| `domains` | JSON body (bulk only) | array of strings, max 50 | — |
-
-### Response formats
-
-**`summary`** — essential fields:
-
-`domain`, `registration_status`, `registrar`, `created_at`, `expires_at`, `states`
-
-**`full`** — all parsed fields plus raw WHOIS text:
-
-`whois_server`, `owner`, `updated_at`, `name_servers`, `dnssec`, `raw`, …
-
-### Single lookup example
+Both endpoints accept `format=summary` (default) or `format=full`.
 
 ```bash
-curl -s "http://localhost:8000/api/v1/whois/google.com?format=summary" | jq
+curl "http://localhost:8000/api/v1/whois/google.com"
 ```
 
 ```json
@@ -185,276 +85,58 @@ curl -s "http://localhost:8000/api/v1/whois/google.com?format=summary" | jq
 }
 ```
 
-### Bulk lookup example
-
 ```bash
-curl -s -X POST "http://localhost:8000/api/v1/whois/bulk" \
+curl -X POST "http://localhost:8000/api/v1/whois/bulk" \
   -H "Content-Type: application/json" \
-  -d '{
-    "domains": ["google.com", "this-domain-is-free-xyz123.com"],
-    "format": "summary"
-  }' | jq
+  -d '{"domains": ["google.com", "example.org"]}'
 ```
 
-```json
-{
-  "format": "summary",
-  "results": [
-    {
-      "domain": "google.com",
-      "status": "registered",
-      "data": { "domain": "google.com", "registration_status": "registered", "...": "..." }
-    },
-    {
-      "domain": "this-domain-is-free-xyz123.com",
-      "status": "available",
-      "data": { "domain": "this-domain-is-free-xyz123.com", "registration_status": "available", "...": "..." }
-    }
-  ]
-}
-```
+Errors return `{"message": "...", "code": "..."}` with one of these codes:
 
-### Bulk result statuses
+| Status | Code | Cause |
+|--------|------|-------|
+| 422 | `invalid_domain` | Malformed domain name |
+| 429 | `too_many_requests` | Rate limit exceeded |
+| 502 | `lookup_failed` | WHOIS server unreachable or TLD unsupported |
 
-| Status | Meaning |
-|--------|---------|
-| `registered` | Domain has active WHOIS registration data |
-| `available` | Domain appears unregistered / available |
-| `unknown` | WHOIS response could not be classified confidently |
-| `error` | Lookup failed (invalid domain, timeout, server error) |
+The full reference is available in the running app at `/docs`.
 
-### Error responses
-
-Errors return JSON with `message` and `code`:
-
-| HTTP | Code | Typical cause |
-|------|------|----------------|
-| `422` | `invalid_domain` | Malformed domain name |
-| `429` | `too_many_requests` | Rate limit exceeded |
-| `502` | `lookup_failed` | WHOIS server unreachable or TLD unsupported |
-| `500` | `server_error` | Unexpected server error |
-
----
-
-## ⚙️ Configuration
-
-All WHOIS-related settings live in `.env` and `config/whois.php`.
-
-```env
-# Timeouts (seconds)
-WHOIS_TIMEOUT=8
-WHOIS_CONNECT_TIMEOUT=3
-
-# Bulk
-WHOIS_BULK_LIMIT=50
-WHOIS_BULK_CONCURRENCY=5
-WHOIS_BULK_MAX_EXECUTION=300
-
-# Cache
-WHOIS_CACHE_ENABLED=true
-WHOIS_CACHE_TTL=3600
-
-# Rate limits (requests per minute, per IP)
-WHOIS_RATE_LIMIT=60
-WHOIS_BULK_RATE_LIMIT=10
-
-# Laravel cache driver — use redis in production for best performance
-CACHE_STORE=database
-```
+## Configuration
 
 | Variable | Default | Description |
 |----------|---------|-------------|
-| `WHOIS_TIMEOUT` | `8` | Max seconds to read WHOIS server response |
-| `WHOIS_CONNECT_TIMEOUT` | `3` | Max seconds to open TCP connection (port 43) |
-| `WHOIS_BULK_CONCURRENCY` | `5` | Parallel lookups during bulk requests |
-| `WHOIS_BULK_LIMIT` | `50` | Max domains per bulk request |
-| `WHOIS_CACHE_TTL` | `3600` | Cache lifetime in seconds (1 hour) |
-| `WHOIS_RATE_LIMIT` | `60` | Single lookup requests per minute per IP |
+| `WHOIS_TIMEOUT` | `8` | Seconds to wait for a WHOIS response |
+| `WHOIS_CONNECT_TIMEOUT` | `3` | Seconds to open the connection |
+| `WHOIS_BULK_LIMIT` | `50` | Maximum domains per bulk request |
+| `WHOIS_BULK_CONCURRENCY` | `5` | Parallel lookups in a bulk request |
+| `WHOIS_CACHE_ENABLED` | `true` | Cache lookup results |
+| `WHOIS_CACHE_TTL` | `3600` | Cache lifetime in seconds |
+| `WHOIS_RATE_LIMIT` | `60` | Single lookups per minute per IP |
 | `WHOIS_BULK_RATE_LIMIT` | `10` | Bulk requests per minute per IP |
 
-> **Tip:** For production, set `CACHE_STORE=redis` and keep `WHOIS_CACHE_ENABLED=true`. Cached lookups typically respond in ~1 ms.
+Custom WHOIS servers per TLD can be set in `config/whois.php` under `custom_servers`.
 
-Custom WHOIS servers for specific TLDs can be added in `config/whois.php` under `custom_servers`. Common Turkish local second-level zones such as `.com.tr`, `.net.tr`, `.org.tr`, `.web.tr`, `.gen.tr`, `.gov.tr`, and `.edu.tr` are configured by default to use the TRABIS WHOIS server.
+## Deployment
 
----
+The Dockerfile builds a single Alpine-based image running Nginx and PHP-FPM. On start, the container generates `APP_KEY` if it is missing, caches config and routes, and runs migrations when `RUN_MIGRATIONS=true`.
 
-## 🏗️ Architecture
+**Database.** SQLite is used by default; mount `/var/www/html/database` and `/var/www/html/storage` as volumes to keep data. For PostgreSQL, set:
 
-WhoisScope uses a layered DDD structure:
-
-```mermaid
-flowchart TB
-    subgraph Presentation
-        UI[Vue 3 Web UI]
-        API[Laravel API Controllers]
-    end
-
-    subgraph Application
-        UC1[LookupWhoisUseCase]
-        UC2[BulkLookupWhoisUseCase]
-    end
-
-    subgraph Domain
-        ENT[WhoisRecord]
-        VO[Value Objects]
-        REPO_IF[WhoisRepositoryInterface]
-    end
-
-    subgraph Infrastructure
-        CACHE[CachedWhoisRepository]
-        PHP[PhpWhoisRepository]
-        LIB[io-developer/php-whois]
-    end
-
-    UI --> API
-    API --> UC1 & UC2
-    UC1 & UC2 --> REPO_IF
-    REPO_IF --> CACHE
-    CACHE --> PHP
-    PHP --> LIB
-    PHP --> ENT
+```env
+DB_CONNECTION=pgsql
+DB_URL=postgresql://user:password@host:5432/database
 ```
 
-### Directory layout
+`DATABASE_URL` is accepted in place of `DB_URL`. The image includes the PostgreSQL driver by default; to build for MySQL instead, pass `--build-arg PHP_DB_EXTENSIONS=pdo_mysql`, or pass an empty value for SQLite only.
 
-```
-app/
-├── Domain/Whois/              # Entities, value objects, domain services, exceptions
-├── Application/Whois/         # Use cases, DTOs, application services
-├── Infrastructure/Whois/      # php-whois adapter, cache decorator, socket loader
-├── Http/                      # Controllers, form requests, API resources
-└── Providers/                 # DI bindings, rate limiters
+**Dokploy.** Create an application from this repository with the Dockerfile build type, expose container port 80, and set the environment variables above along with `APP_URL` and a persistent `APP_KEY`.
 
-resources/js/                  # Vue 3 SPA (router, i18n, components)
-routes/
-├── api.php                    # /api/v1/whois/*
-└── web.php                    # SPA catch-all
-```
-
-### Request flow (single lookup)
-
-```mermaid
-sequenceDiagram
-    participant Client
-    participant API as WhoisController
-    participant UC as LookupWhoisUseCase
-    participant Cache as CachedWhoisRepository
-    participant WHOIS as PhpWhoisRepository
-    participant Server as WHOIS Server :43
-
-    Client->>API: GET /api/v1/whois/example.com
-    API->>UC: execute(domain)
-    UC->>Cache: lookup(domain)
-    alt cache hit
-        Cache-->>UC: WhoisRecord
-    else cache miss
-        Cache->>WHOIS: lookup(domain)
-        WHOIS->>Server: TCP WHOIS query
-        Server-->>WHOIS: raw text
-        WHOIS-->>Cache: WhoisRecord
-        Cache-->>UC: WhoisRecord
-    end
-    UC-->>API: WhoisRecord
-    API-->>Client: JSON response
-```
-
----
-
-## 🧪 Tests
+## Testing
 
 ```bash
 php artisan test
 ```
 
-The test suite covers API responses, caching, rate limiting, and registration status detection.
+## License
 
----
-
-## 📦 Tech Stack
-
-<p>
-  <img src="https://img.shields.io/badge/Laravel-13-FF2D20?logo=laravel&logoColor=white" alt="Laravel">
-  <img src="https://img.shields.io/badge/Vue-3-4FC08D?logo=vuedotjs&logoColor=white" alt="Vue">
-  <img src="https://img.shields.io/badge/Vite-8-646CFF?logo=vite&logoColor=white" alt="Vite">
-  <img src="https://img.shields.io/badge/Tailwind-4-06B6D4?logo=tailwindcss&logoColor=white" alt="Tailwind">
-  <img src="https://img.shields.io/badge/php--whois-4.1-777BB4?logo=php&logoColor=white" alt="php-whois">
-</p>
-
-| Layer | Technology |
-|-------|------------|
-| Backend | Laravel 13, PHP 8.6 (min. 8.4) |
-| WHOIS library | [io-developer/php-whois](https://github.com/io-developer/php-whois) |
-| Frontend | Vue 3, Vue Router, Tailwind CSS 4, Vite 8 |
-| Cache | Laravel Cache (database, file, or Redis) |
-| Database | SQLite by default |
-
----
-
-## 🤝 Contributing
-
-Contributions are welcome. Please open an issue or pull request. By contributing, you agree that your code will be released under the [MIT License](LICENSE).
-
----
-
-## 📄 License
-
-WhoisScope is open source software licensed under the **[MIT License](LICENSE)**.
-
-You may use, copy, modify, merge, publish, distribute, sublicense, and sell copies of the software — for personal or commercial projects — as long as the license notice is included.
-
----
-
-## 🐳 Docker / Dokploy Deployment
-
-This repository includes a production-oriented Docker setup that is compatible with Dokploy's Dockerfile and Docker Compose deployments.
-
-### Build and run locally
-
-```bash
-docker compose up -d --build
-```
-
-The application will be available at **http://localhost:8000**.
-
-### Dokploy setup
-
-1. Create a new Dokploy application from this repository.
-2. Select **Dockerfile** deployment, or use the included `docker-compose.yml` if your Dokploy project is Compose-based.
-3. Set the public port to **80** inside the container.
-4. Configure environment variables as needed. At minimum, set:
-
-```env
-APP_NAME=WhoisScope
-APP_ENV=production
-APP_DEBUG=false
-APP_URL=https://your-domain.example
-LOG_CHANNEL=stderr
-DB_CONNECTION=sqlite
-DB_DATABASE=/var/www/html/database/database.sqlite
-SESSION_DRIVER=database
-CACHE_STORE=database
-QUEUE_CONNECTION=database
-RUN_MIGRATIONS=true
-```
-
-`APP_KEY` is optional for first boot. If it is omitted, the container entrypoint generates one automatically. For stable encrypted sessions in production, set a persistent `APP_KEY` value in Dokploy after generating it once.
-
-### Persistent volumes
-
-When using SQLite, persist these paths in Dokploy so database and generated storage files survive redeployments:
-
-| Container path | Purpose |
-|----------------|---------|
-| `/var/www/html/database` | SQLite database file |
-| `/var/www/html/storage` | Laravel cache/session/log/storage data |
-
-### Runtime behavior
-
-On startup, the container:
-
-- creates required Laravel writable directories,
-- creates the SQLite database file when `DB_CONNECTION=sqlite`,
-- generates `APP_KEY` when missing,
-- caches Laravel config, routes, and views,
-- runs migrations when `RUN_MIGRATIONS=true`,
-- starts Nginx and PHP-FPM through Supervisor.
+Released under the [MIT License](LICENSE).

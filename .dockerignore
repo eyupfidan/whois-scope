@@ -14,3 +14,9 @@ npm-debug.log
 Dockerfile
 docker-compose*.yml
 README.md
+tests
+docs
+phpunit.xml
+.phpunit.result.cache
+.editorconfig
+bootstrap/cache/*.php
