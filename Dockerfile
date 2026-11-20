@@ -18,9 +18,10 @@ RUN composer install \
     --no-progress \
     --prefer-dist \
     --optimize-autoloader \
-    --no-scripts
+    --no-scripts \
+    --ignore-platform-req=php
 
-FROM php:8.3-fpm-bookworm AS app
+FROM php:8.6-fpm-bookworm AS app
 
 ARG WWWGROUP=1000
 ARG WWWUSER=1000

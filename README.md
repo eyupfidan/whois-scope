@@ -4,7 +4,7 @@
 
 <p align="center">
   <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-blue.svg" alt="MIT License"></a>
-  <img src="https://img.shields.io/badge/PHP-8.3%2B-777BB4?logo=php&logoColor=white" alt="PHP 8.3+">
+  <img src="https://img.shields.io/badge/PHP-8.6-777BB4?logo=php&logoColor=white" alt="PHP 8.6">
   <img src="https://img.shields.io/badge/Laravel-13-FF2D20?logo=laravel&logoColor=white" alt="Laravel 13">
   <img src="https://img.shields.io/badge/Vue.js-3-4FC08D?logo=vuedotjs&logoColor=white" alt="Vue 3">
   <img src="https://img.shields.io/badge/Tailwind-4-06B6D4?logo=tailwindcss&logoColor=white" alt="Tailwind CSS 4">
@@ -382,7 +382,7 @@ The test suite covers API responses, caching, rate limiting, and registration st
 
 | Layer | Technology |
 |-------|------------|
-| Backend | Laravel 13, PHP 8.3+ |
+| Backend | Laravel 13, PHP 8.6 (min. 8.4) |
 | WHOIS library | [io-developer/php-whois](https://github.com/io-developer/php-whois) |
 | Frontend | Vue 3, Vue Router, Tailwind CSS 4, Vite 8 |
 | Cache | Laravel Cache (database, file, or Redis) |
