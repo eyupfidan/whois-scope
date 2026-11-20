@@ -7,13 +7,13 @@ use Tests\TestCase;
 
 class ExampleTest extends TestCase
 {
-    /**
-     * A basic test example.
-     */
-    public function test_the_application_returns_a_successful_response(): void
+    public function test_root_redirects_to_default_locale(): void
     {
-        $response = $this->get('/');
+        $this->get('/')->assertRedirect('/en');
+    }
 
-        $response->assertStatus(200);
+    public function test_the_localized_home_page_returns_a_successful_response(): void
+    {
+        $this->withoutVite()->get('/en')->assertStatus(200);
     }
 }
