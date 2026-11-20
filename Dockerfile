@@ -50,12 +50,13 @@ RUN apt-get update \
         bcmath \
         intl \
         mbstring \
-        opcache \
         pcntl \
         pdo_mysql \
         pdo_pgsql \
         pdo_sqlite \
         zip \
+    # OPcache is built into PHP since 8.5; fail the build if it is missing.
+    && php -r 'exit(extension_loaded("Zend OPcache") ? 0 : 1);' \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
